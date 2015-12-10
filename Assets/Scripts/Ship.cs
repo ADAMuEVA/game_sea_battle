@@ -77,5 +77,28 @@ public class Ship : MonoBehaviour {
 	
 	}
 
+	// находится ли корабль горизонтально
+	public bool isHorizontal()
+	{
+		return mHorizontal;
+	}
+	
+	// получить координаты корабля
+	public int GetX()
+	{
+		return mX;
+	}
+	
+	public int GetY()
+	{
+		return mY;
+	}
+
+	// получить размер корабля
+	public int GetShipLength()
+	{
+		return ShipLengths[(int)mType];
+	}
 
 }
+
