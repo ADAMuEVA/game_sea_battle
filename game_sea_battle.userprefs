@@ -1,0 +1,14 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameOrder.cs">
+    <Files>
+      <File FileName="Assets/Scripts/Ship.cs" Line="101" Column="3" />
+      <File FileName="../project/SeaWar/Assets/Scripts/Ship.cs" Line="168" Column="3" />
+      <File FileName="Assets/Scripts/GameOrder.cs" Line="63" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
