@@ -15,6 +15,8 @@ public class GameOrder : MonoBehaviour {
 	
 
 	GameCamera mGameCamera;
+	FieldOperations mPlayerField;
+	FieldOperations mEnemyField;
 
 	
 	public enum GameState
@@ -51,6 +53,8 @@ public class GameOrder : MonoBehaviour {
 	// Use this for initialization
 	void Start()
 	{
+		mPlayerField = PlayerField.GetComponent<FieldOperations>();
+		mEnemyField = EnemyField.GetComponent<FieldOperations>();
 		mGameCamera = GameCamera.GetComponent<GameCamera>();
 	}
 

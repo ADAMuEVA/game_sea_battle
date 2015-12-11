@@ -64,6 +64,90 @@ public class Ship : MonoBehaviour {
 	// максимальная глубина в которой может распологаться корабль
 	const float Bottom = -2.0f;
 
+	// указать параметры нового корабля
+	public void Init(Vector3 startpt, Vector2 field, Type type, bool horizontal, int x, int y)
+	{
+		mType = type;
+		mHorizontal = horizontal;
+		mX = x;
+		mY = y;
+		mStartPt = startpt;
+		mFieldSize = field;
+		mDepth = 0.0f;
+	}
+	
+	// переместить корабль
+	public void Move (bool horizontal, int x, int y)
+	{
+		if (mHorizontal == horizontal &&
+		    mX == x && mY == y)
+			return;
+		
+		mHorizontal = horizontal;
+		mX = x;
+		mY = y;
+		
+		RefreshPosition();
+	}
+	
+	// обновить положение корабля
+	void RefreshPosition()
+	{
+		// если корабль не на поле, скрыть
+		if(mX == -1 ||
+		   mY == -1)
+		{
+			gameObject.SetActive(false);
+			return;
+		}
+		
+		gameObject.SetActive(true);
+		
+		// если корабль затоплен, то погружать его пока не достигнет дна
+		if(mSinked)
+		{
+			mDepth -= Time.deltaTime * SinkingTimeCoef;
+			
+			if (mDepth < Bottom)
+				mDepth = Bottom;
+		}
+		
+		// обновить положение корабля
+		Vector3 offset;
+		
+		if (mHorizontal)
+		{
+			offset = new Vector3(
+				ShipLengths[(int)mType] * 0.5f * mFieldSize.x,
+				mDepth,
+				mFieldSize.y / 2);
+			offset += ShipPositionHor[(int)mType];
+		}
+		else
+		{
+			offset = new Vector3(
+				mFieldSize.x / 2,
+				mDepth,
+				ShipLengths[(int)mType] * 0.5f * mFieldSize.y);
+			offset += ShipPositionVer[(int)mType];
+		}
+		
+		transform.position = new Vector3(
+			mStartPt.x + mFieldSize.x * mX + offset.x,
+			offset.y,
+			mStartPt.z + mFieldSize.y * mY + offset.z);
+		
+		transform.localScale = ShipScale[(int)mType];
+		
+		if(mHorizontal)
+		{
+			transform.rotation = Quaternion.Euler(ShipRotation[(int)mType]);
+		}
+		else
+		{
+			transform.rotation = Quaternion.Euler(ShipRotation[(int)mType] + VerticalRotations);
+		}
+	}
 
 	// Use this for initialization
 	void Start()
@@ -74,7 +158,7 @@ public class Ship : MonoBehaviour {
 	// Update is called once per frame
 	void Update()
 	{
-	
+		RefreshPosition();
 	}
 
 	// находится ли корабль горизонтально
