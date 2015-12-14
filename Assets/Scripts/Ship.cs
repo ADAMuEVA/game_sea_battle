@@ -184,5 +184,10 @@ public class Ship : MonoBehaviour {
 		return ShipLengths[(int)mType];
 	}
 
+	// получить тип корабля
+	public Type GetShipType()
+	{
+		return mType;
+	}
 }
 

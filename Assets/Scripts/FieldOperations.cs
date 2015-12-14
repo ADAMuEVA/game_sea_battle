@@ -120,4 +120,22 @@ public class FieldOperations : MonoBehaviour {
 		return obj;
 	}
 
+	//посчитать количество кораблей типа type на поле
+	public int GetShipsCountByType(Ship.Type type)
+	{
+		int res = 0;
+		
+		foreach(var ship in mShips)
+		{
+			Ship subship = ship.GetComponent<Ship>();
+			
+			if(subship.GetShipType() == type)
+			{
+				++res;
+			}
+		}
+		
+		return res;
+	}
+
 }
