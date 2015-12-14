@@ -1,4 +1,4 @@
-п»їusing UnityEngine;
+using UnityEngine; 
 using System.Collections;
 using System.Collections.Generic;
 
@@ -43,7 +43,7 @@ public class FieldOperations : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		
-		//РІС‹СЃС‡РёС‚С‹РІР°РЅРёРµ СЂР°Р·РјРµСЂРѕРІ РєР»РµС‚РѕРє Рё РїРѕР»РѕР¶РµРЅРёСЏ РїРѕР»СЏ
+		//высчитывание размеров клеток и положения поля
 		Vector3 pos = transform.position;
 		Vector3 bounds = GetComponent<Renderer>().bounds.size;
 		
@@ -61,7 +61,7 @@ public class FieldOperations : MonoBehaviour {
 		mFieldHeight = (mFieldEnd.z - mFieldStart.z) / FieldsVerCount;
 
 		
-		//СЃРѕР·РґР°РЅРёРµ СЂР°Р·Р»РёС‡РЅС‹С… РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹С… РѕР±СЉРµРєС‚РѕРІ РґР»СЏ РїРѕР»СЏ - РєР»РµС‚РєРё, РєСЂР°СЃРЅС‹Рµ СЂР°РјРєРё, С‚РѕС‡РєРё
+		//создание различных вспомогательных объектов для поля - клетки, красные рамки, точки
 		CreateCellObjects(mFieldStart, mFieldEnd);
 
 
@@ -86,7 +86,7 @@ public class FieldOperations : MonoBehaviour {
 		
 
 		
-		//РµСЃР»Рё СЃС‚РѕРёС‚ СЂРµР¶РёРј РІС‹Р±РѕСЂР° СЏС‡РµРµРє
+		//если стоит режим выбора ячеек
 		if (mSelectionLength > 0)
 		{
 
@@ -95,7 +95,7 @@ public class FieldOperations : MonoBehaviour {
 		}
 	}
 
-	// СЃРѕР·РґР°РЅРёРµ СЂР°Р·Р»РёС‡РЅС‹С… РІСЃРїРѕРјРѕРіР°С‚РµР»СЊРЅС‹С… РѕР±СЉРµРєС‚РѕРІ РЅР° РїРѕР»Рµ 
+	// создание различных вспомогательных объектов на поле 
 	void CreateCellObjects(Vector3 start, Vector3 end)
 	{
 		for (int i = 0; i < FieldsHorCount; ++i)
@@ -120,7 +120,7 @@ public class FieldOperations : MonoBehaviour {
 		return obj;
 	}
 
-	//РїРѕСЃС‡РёС‚Р°С‚СЊ РєРѕР»РёС‡РµСЃС‚РІРѕ РєРѕСЂР°Р±Р»РµР№ С‚РёРїР° type РЅР° РїРѕР»Рµ
+	//посчитать количество кораблей типа type на поле
 	public int GetShipsCountByType(Ship.Type type)
 	{
 		int res = 0;
