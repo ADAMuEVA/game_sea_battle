@@ -74,4 +74,9 @@ public class GameCamera : MonoBehaviour {
 			
 		}
 
+	public void ChangePosition(int pos)
+	{
+		mCurrentPosition = (Position)pos;
+	}
+
 }

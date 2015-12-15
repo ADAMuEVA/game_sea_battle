@@ -161,10 +161,51 @@ public class Ship : MonoBehaviour {
 		RefreshPosition();
 	}
 
+	// получить тип корабля
+	public Type GetShipType()
+	{
+		return mType;
+	}
+	
+	// получить возможное количество короблей типа type
+	public static int GetShipsMaxCount(Type type)
+	{
+		return ShipMaxCounts[(int)type];
+	}
+	
+	// получить клетки в которых распологается корабль
+	public List<Vector2> GetCells()
+	{
+		List<Vector2> cells = new List<Vector2>();
+		
+		if (mHorizontal)
+		{
+			for (int i = 0; i < ShipLengths[(int)mType]; ++i)
+			{
+				cells.Add(new Vector2(mX + i, mY));
+			}
+		}
+		else
+		{
+			for (int i = 0; i < ShipLengths[(int)mType]; ++i)
+			{
+				cells.Add(new Vector2(mX, mY + i));
+			}
+		}
+		
+		return cells;
+	}
+
 	// находится ли корабль горизонтально
 	public bool isHorizontal()
 	{
 		return mHorizontal;
+	}
+
+	// получить размер коробля типа type
+	public static int GetShipLength(Type type)
+	{
+		return ShipLengths[(int)type];
 	}
 	
 	// получить координаты корабля
@@ -177,17 +218,6 @@ public class Ship : MonoBehaviour {
 	{
 		return mY;
 	}
-
-	// получить размер корабля
-	public int GetShipLength()
-	{
-		return ShipLengths[(int)mType];
-	}
-
-	// получить тип корабля
-	public Type GetShipType()
-	{
-		return mType;
-	}
+	
 }
 
