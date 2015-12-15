@@ -1,9 +1,8 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../Новая папка/Копия game_sea_battle/Assets/Scripts/FieldOperations.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\FieldOperations.cs">
     <Files>
-      <File FileName="../Новая папка/Копия game_sea_battle/Assets/Scripts/FieldOperations.cs" Line="121" Column="2" />
-      <File FileName="../project/SeaWar/Assets/Scripts/BattleshipsPlacing.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\FieldOperations.cs" Line="155" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

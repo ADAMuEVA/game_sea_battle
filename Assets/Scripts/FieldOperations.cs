@@ -137,5 +137,61 @@ public class FieldOperations : MonoBehaviour {
 		
 		return res;
 	}
+	// сделать режим выбора ячейки для удара
+	// когда удар будет совершен игроком
+	// вызовется функция записанная в handler
+	public void SelectAim(AimSelectedHandler handler)
+	{
+		mAimSelectHandler = handler;
+		mSelectionLength = 1;
+		mSelectionHorizontal = true;
+	}
+	//определить, находится ли корабль на клетке x, y
+	public bool isCellBelongsShip(int x, int y)
+	{
+		foreach(var ship in mShips)
+		{
+			Ship subship = ship.GetComponent<Ship>();
+			
+			if(subship.isHorizontal())
+			{
+				if(subship.GetX() <= x && 
+				   subship.GetX() + subship.GetShipLength() > x &&
+				   subship.GetY() == y)
+				{
+					return true;
+				}
+			}
+			else
+			{
+				if (subship.GetY() <= y &&
+				    subship.GetY() + subship.GetShipLength() > y &&
+				    subship.GetX() == x)
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+	// атаковать клетку x, y
+	// и возвращается значение true - если было попадение
+	// false - если промах
+	public bool AttackCell(int x, int y)
+	{
+		mAttackedCells[x, y] = true;
+		//RefreshRedPlanes();
+		//CheckSinkedShips();
+		
+		//отмечается последняя выбранная клетка
+		LastCell.transform.position = new Vector3(
+			x * mFieldWidth + mFieldStart.x + mFieldWidth / 2,
+			0.1f,
+			y * mFieldHeight + mFieldStart.z + mFieldHeight / 2);
+		LastCell.GetComponent<MeshRenderer>().enabled = true;
+		
+		return isCellBelongsShip(x, y);
+	}
 
 }
