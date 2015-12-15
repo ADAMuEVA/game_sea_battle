@@ -4,10 +4,13 @@ using System.Collections.Generic;
 
 public class FieldOperations : MonoBehaviour {
 	
+	
 	public const int FieldsHorCount = 10;
 	public const int FieldsVerCount = 10;
 	
 	GameObject[] mPlaneObjects = new GameObject[FieldsHorCount * FieldsVerCount];
+	GameObject[] mRedPlaneObjects = new GameObject[FieldsHorCount * FieldsVerCount];
+	GameObject[] mRedDotObjects = new GameObject[FieldsHorCount * FieldsVerCount];
 	
 	public GameObject PlanePrefab;
 	public GameObject RedPlanePrefab;
@@ -21,13 +24,30 @@ public class FieldOperations : MonoBehaviour {
 	public GameObject GameObj;
 	public GameObject FirePrefab;
 	public GameObject LastCell;
-
+	
+	GameOrder mGame;
 	AimSelectedHandler mAimSelectHandler;
+	
+	class FireObject
+	{
+		public GameObject Object;
+		public int X;
+		public int Y;
+		
+		public FireObject(GameObject obj, int x, int y)
+		{
+			Object = obj;
+			X = x;
+			Y = y;
+		}
+	}
+	
 	
 	int mSelectionLength = 0;
 	bool mSelectionHorizontal = true;
 	List<GameObject> mLastSelected = new List<GameObject>();
 	List<GameObject> mShips = new List<GameObject>();
+	List<FireObject> mFireList = new List<FireObject>();
 	Vector3 mFieldStart;
 	Vector3 mFieldEnd;
 	float mFieldWidth;
@@ -39,6 +59,7 @@ public class FieldOperations : MonoBehaviour {
 	
 	const float FirePosY = 0.5f;
 	
+
 	
 	// Use this for initialization
 	void Start () {
@@ -137,6 +158,97 @@ public class FieldOperations : MonoBehaviour {
 		
 		return res;
 	}
+	//определить, все ли корабли установлены на поле
+	public bool isAllShipsArePlaced 
+	{
+		get
+		{
+			return (GetShipsCountByType(Ship.Type.AircraftCarrier) ==
+			        Ship.GetShipsMaxCount(Ship.Type.AircraftCarrier)) &&
+				(GetShipsCountByType(Ship.Type.Battleship) ==
+				 Ship.GetShipsMaxCount(Ship.Type.Battleship)) &&
+					(GetShipsCountByType(Ship.Type.Cruiser) ==
+					 Ship.GetShipsMaxCount(Ship.Type.Cruiser)) &&
+					(GetShipsCountByType(Ship.Type.Destroyer) ==
+					 Ship.GetShipsMaxCount(Ship.Type.Destroyer)) &&
+					(mPlaceShip == null);
+		}
+	}
+	
+	// размещение различных вспомогательных объектов на поле
+	public void RefreshRedPlanes()
+	{
+		foreach (var plane in mRedPlaneObjects)
+		{
+			plane.GetComponent<MeshRenderer>().enabled = false;
+		}
+		
+		foreach (var dot in mRedDotObjects)
+		{
+			dot.GetComponent<MeshRenderer>().enabled = false;
+		}
+		
+		if (mGame.State != GameOrder.GameState.Placing)
+		{
+			for (int i = 0; i < FieldsHorCount; ++i)
+			{
+				for (int j = 0; j < FieldsVerCount; ++j)
+				{
+					if(mAttackedCells[i, j])
+					{
+						if (isCellBelongsShip(i, j))
+						{
+							mRedPlaneObjects[j * FieldsHorCount + i].GetComponent<MeshRenderer>().enabled = true;
+						}
+						else
+						{
+							mRedDotObjects[j * FieldsHorCount + i].GetComponent<MeshRenderer>().enabled = true;
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			foreach (var ship in mShips)
+			{
+				if (ship == mPlaceShip)
+					continue;
+				
+				Ship subship = ship.GetComponent<Ship>();
+				
+				if (subship.isHorizontal())
+				{
+					for (int i = subship.GetX() - 1; i <= subship.GetX() + subship.GetShipLength(); ++i)
+					{
+						for (int j = subship.GetY() - 1; j <= subship.GetY() + 1; ++j)
+						{
+							if (i >= 0 && j >= 0 &&
+							    i < FieldsHorCount && j < FieldsVerCount)
+							{
+								mRedPlaneObjects[j * FieldsHorCount + i].GetComponent<MeshRenderer>().enabled = true;
+							}
+						}
+					}
+				}
+				else
+				{
+					for (int i = subship.GetX() - 1; i <= subship.GetX() + 1; ++i)
+					{
+						for (int j = subship.GetY() - 1; j <= subship.GetY() + subship.GetShipLength(); ++j)
+						{
+							if (i >= 0 && j >= 0 &&
+							    i < FieldsHorCount && j < FieldsVerCount)
+							{
+								mRedPlaneObjects[j * FieldsHorCount + i].GetComponent<MeshRenderer>().enabled = true;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	// сделать режим выбора €чейки дл€ удара
 	// когда удар будет совершен игроком
 	// вызоветс€ функци€ записанна€ в handler

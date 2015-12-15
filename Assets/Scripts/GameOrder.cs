@@ -63,5 +63,9 @@ public class GameOrder : MonoBehaviour {
 	{
 
 	}
-
+	public GameState State {
+		get {
+			return mGameState;
+		}
+	}
 }
