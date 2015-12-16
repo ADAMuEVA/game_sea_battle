@@ -306,4 +306,23 @@ public class FieldOperations : MonoBehaviour {
 		return isCellBelongsShip(x, y);
 	}
 
+	//??????????, ??? ?? ??????? ?????????
+	public bool isCleared()
+	{
+		bool res = true;
+		
+		foreach(var ship in mShips)
+		{
+			Ship subship = ship.GetComponent<Ship>();
+			
+			if(!subship.isSinked())
+			{
+				res = false;
+				break;
+			}
+		}
+		
+		return res;
+	}
+
 }

@@ -163,16 +163,89 @@ public class GameOrder : MonoBehaviour {
 		OnYourTurnBegin();
 	}
 	
+	// действия в конце хода игрока (succ = true если было попадание)
+	public void YourTurnEnd(bool succ)
+	{
+		OnYourTurnEnd(succ);
+		
+		if (succ)
+		{
+			if (mEnemyField.isCleared())
+			{
+				mTasks.Add(new Task(1.0f, () =>
+				                    {
+					CanvasVictory.SetActive(true);
+				}));
+			}
+			else
+			{
+				mGameState = GameState.PlayerTurn;
+				
+				mTasks.Add(new Task(0.3f, () =>
+				                    {
+					YourTurnBegin();
+				}));
+			}
+		}
+		else
+		{
+			SetEnemyTurn();
+		}
+	}
+	
 	// действия в начале действия противника
 	public void EnemyTurnBegin()
 	{
 		OnEnemyTurnBegin();
 	}
-
+	
+	// действия в конце хода противника (succ = true если было попадание)
+	public void EnemyTurnEnd(bool succ)
+	{
+		OnEnemyTurnEnd(succ);
+		
+		if (succ)
+		{
+			if (mPlayerField.isCleared())
+			{
+				mTasks.Add(new Task(1.0f, () =>
+				                    {
+					CanvasDefeat.SetActive(true);
+				}));
+			}
+			else
+			{
+				mGameState = GameState.EnemyTurn;
+				
+				mTasks.Add(new Task(0.3f, () =>
+				                    {
+					EnemyTurnBegin();
+				}));
+			}
+		}
+		else
+		{
+			SetPlayerTurn();
+		}
+	}
+	
 	// добавить задачу в конец списка
 	public void AddTask(float time, TaskHandler handler)
 	{
 		mTasks.Add(new Task(time, handler));
+	}
+	
+	// закончить ход (succ = true если попадание)
+	public void EndTurn(bool succ)
+	{
+		if(State == GameState.PlayerTurn)
+		{
+			YourTurnEnd(succ);
+		}
+		else if(State == GameState.EnemyTurn)
+		{
+			EnemyTurnEnd(succ);
+		}
 	}
 	
 	// началась ли игра

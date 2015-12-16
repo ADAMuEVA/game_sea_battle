@@ -45,6 +45,7 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\BattleshipsPlacing.cs" />
      <Compile Include="Assets\Scripts\FieldOperations.cs" />
      <Compile Include="Assets\Scripts\GameCamera.cs" />
      <Compile Include="Assets\Scripts\GameOptions.cs" />
