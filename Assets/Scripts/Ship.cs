@@ -161,6 +161,12 @@ public class Ship : MonoBehaviour {
 		RefreshPosition();
 	}
 
+	// получить размер корабля
+	public int GetShipLength()
+	{
+		return ShipLengths[(int)mType];
+	} 
+
 	// получить тип корабля
 	public Type GetShipType()
 	{
@@ -218,6 +224,54 @@ public class Ship : MonoBehaviour {
 	{
 		return mY;
 	}
+
+	//принадлежит ли клетка кораблю
+	public bool HasCell(int cell_x, int cell_y)
+	{
+		if (mHorizontal)
+		{
+			for (int i = 0; i < ShipLengths[(int)mType]; ++i)
+			{
+				if(cell_x == mX + i &&
+				   cell_y == mY)
+				{
+					return true;
+				}
+			}
+		}
+		else
+		{
+			for (int i = 0; i < ShipLengths[(int)mType]; ++i)
+			{
+				if (cell_x == mX &&
+				    cell_y == mY + i)
+				{
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
+
+	// является ли корабль затопленным
+	public bool isSinked()
+	{
+		return mSinked;
+	}
 	
+	// затопить корабль
+	public void Sink()
+	{
+		mSinked = true;
+		
+		gameObject.SetActive(true);
+	}
+	
+	// получить глубину на которой находится корабль
+	public float GetDepth()
+	{
+		return mDepth;
+	}
 }
 

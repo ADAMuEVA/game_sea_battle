@@ -1,10 +1,12 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\FieldOperations.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="../project/SeaWar/Assets/Scripts/GameOrder.cs">
     <Files>
-      <File FileName="Assets\Scripts\FieldOperations.cs" Line="222" Column="1" />
-      <File FileName="Assets\Scripts\GameCamera.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\GameOrder.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/FieldOperations.cs" Line="222" Column="1" />
+      <File FileName="Assets/Scripts/GameCamera.cs" Line="140" Column="3" />
+      <File FileName="Assets/Scripts/GameOptions.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/GameOrder.cs" Line="172" Column="2" />
+      <File FileName="../project/SeaWar/Assets/Scripts/GameOrder.cs" Line="125" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

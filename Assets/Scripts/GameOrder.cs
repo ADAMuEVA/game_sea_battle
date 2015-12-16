@@ -17,7 +17,7 @@ public class GameOrder : MonoBehaviour {
 	GameCamera mGameCamera;
 	FieldOperations mPlayerField;
 	FieldOperations mEnemyField;
-
+	bool mGameBegun = false;
 	
 	public enum GameState
 	{
@@ -61,11 +61,126 @@ public class GameOrder : MonoBehaviour {
 	// Update is called once per frame
 	void Update () 
 	{
-
+		// проверка списка задач
+		// если задачи есть
+		// то проверяется, сколько времени осталось для выполнения первой
+		// если время пришло, выполняется первая задача и удаляется из списка
+		if(mTasks.Count > 0)
+		{
+			Task task = mTasks[0];
+			
+			if(task.Initialized)
+			{
+				if(Time.time - task.InitialTime > task.Time)
+				{
+					task.Handler();
+					mTasks.RemoveAt(0);
+				}
+			}
+			else 
+			{
+				task.InitialTime = Time.time;
+				task.Initialized = true;
+			}
+		}
 	}
-	public GameState State {
-		get {
+
+	// начать в игре ход игрока
+	public void SetPlayerTurn()
+	{
+		mGameState = GameState.PlayerTurn;
+		
+		mTasks.Add(new Task(0.3f, () =>
+		                    {
+			mGameCamera.ChangePosition(2);
+		}));
+		mTasks.Add(new Task(1.0f, () =>
+		                    {
+			CanvasYourTurn.SetActive(true);
+		}));
+		mTasks.Add(new Task(1.0f, () =>
+		                    {
+			CanvasYourTurn.SetActive(false);
+			YourTurnBegin();
+		}));
+	}
+	
+	// начать в игре ход противника
+	public void SetEnemyTurn()
+	{
+		mGameState = GameState.EnemyTurn;
+		
+		mTasks.Add(new Task(0.3f, () =>
+		                    {
+			mGameCamera.ChangePosition(1);
+		}));
+		mTasks.Add(new Task(1.0f, () =>
+		                    {
+			CanvasEnemyTurn.SetActive(true);
+		}));
+		mTasks.Add(new Task(1.0f, () =>
+		                    {
+			CanvasEnemyTurn.SetActive(false);
+			EnemyTurnBegin();
+		}));
+	}
+	
+	public GameState State
+	{
+		get
+		{
 			return mGameState;
+		}
+	}
+	
+	
+	// события:
+	// начало игры
+	public delegate void BeginGameHandler();
+	public event BeginGameHandler OnBeginGame;
+	// начало ходу игрока
+	public delegate void YourTurnBeginHandler();
+	public event YourTurnBeginHandler OnYourTurnBegin;
+	// конец хода игрока
+	public delegate void YourTurnEndHandler(bool succ);
+	public event YourTurnEndHandler OnYourTurnEnd;
+	// начало хода противника
+	public delegate void EnemyTurnBeginHandler();
+	public event EnemyTurnBeginHandler OnEnemyTurnBegin;
+	// конец хода противника
+	public delegate void EnemyTurnEndHandler(bool succ);
+	public event EnemyTurnEndHandler OnEnemyTurnEnd;
+	
+	public void BeginGame()
+	{
+		mGameBegun = true;
+		OnBeginGame();
+	}
+	
+	// действия в начале действия игрока
+	public void YourTurnBegin()
+	{
+		OnYourTurnBegin();
+	}
+	
+	// действия в начале действия противника
+	public void EnemyTurnBegin()
+	{
+		OnEnemyTurnBegin();
+	}
+
+	// добавить задачу в конец списка
+	public void AddTask(float time, TaskHandler handler)
+	{
+		mTasks.Add(new Task(time, handler));
+	}
+	
+	// началась ли игра
+	public bool isGameBegun
+	{
+		get
+		{
+			return mGameBegun;
 		}
 	}
 }

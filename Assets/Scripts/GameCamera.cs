@@ -62,18 +62,83 @@ public class GameCamera : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-
-
-			// показываем окно для расстановки кораблей
-			if (!mStartedCanvasLoaded && Time.time - mStartTime > 1.0f)
-			{
-				CanvasPlaceBattleships.SetActive(true);
-				mStartedCanvasLoaded = true;
-			}
-
-			
+		
+		// плавное перемещение камеры в точку где должна находится камера
+		Quaternion target = Quaternion.Euler(
+			mRotations[(int)mCurrentPosition]);
+		
+		if (transform.rotation != target)
+		{
+			transform.rotation =
+				Quaternion.Slerp(
+					transform.rotation,
+					target,
+					Time.deltaTime * mSmooth);
 		}
-
+		
+		if (transform.position !=
+		    mPositions[(int)mCurrentPosition])
+		{
+			transform.position =
+				Vector3.Lerp(
+					transform.position,
+					mPositions[(int)mCurrentPosition],
+					Time.deltaTime * mSmooth);
+		}
+		
+		
+		
+		// показываем окно для расстановки кораблей
+		if (!mStartedCanvasLoaded && Time.time - mStartTime > 1.0f)
+		{
+			CanvasPlaceBattleships.SetActive(true);
+			mStartedCanvasLoaded = true;
+		}
+		
+		if (mCanvasPlacingLoaded)
+		{
+			GameOrder gameOrder = GameOrder.GetComponent<GameOrder>();
+			
+			if (!gameOrder.isGameBegun)
+			{
+				FieldOperations field_operations = PlayerField.GetComponent<FieldOperations>();
+				if (field_operations.isAllShipsArePlaced)
+				{
+					
+					//если все корабли расставленны, тогда появляется кнопка - "Начать игру"
+					if (mAllShipsPlaced)
+					{
+						if (Time.time - mAllShipsPlacedTime > 1.0f)
+						{
+							CanvasBeginGame.SetActive(true);
+							CanvasPlacing.SetActive(false);
+						}
+					}
+					else
+					{
+						mAllShipsPlacedTime = Time.time;
+						mAllShipsPlaced = true;
+					}
+				}
+				else
+				{
+					CanvasBeginGame.SetActive(false);
+					CanvasPlacing.SetActive(true);
+					BattleshipsPlacing placing = CanvasPlacing.GetComponent<BattleshipsPlacing>();
+					placing.RefreshButtonsTexts();
+					field_operations.RefreshRedPlanes();
+					mAllShipsPlaced = false;
+				}
+			}
+			else
+			{
+				CanvasBeginGame.SetActive(false);
+				CanvasPlacing.SetActive(false);
+				CanvasPlaceBattleships.SetActive(false);
+			}
+		}
+	}
+	
 	public void ChangePosition(int pos)
 	{
 		mCurrentPosition = (Position)pos;
