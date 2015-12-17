@@ -139,9 +139,33 @@ public class GameCamera : MonoBehaviour {
 		}
 	}
 	
+	
+	// изменить положение камеры
 	public void ChangePosition(int pos)
 	{
 		mCurrentPosition = (Position)pos;
 	}
-
+	
+	// скрыть меню с кнопкой "Расставить корабли"
+	public void HideCanvasPlaceBattleships()
+	{
+		CanvasPlaceBattleships.SetActive(false);
+	}
+	
+	// скрыть меню расстановки кораблей
+	public void LoadCanvasPlacing()
+	{
+		CanvasPlacing.SetActive(true);
+		mCanvasPlacingLoaded = true;
+	}
+	
+	// перейти в главное меню
+	public void LoadMainMenu()
+	{
+		
+		Application.LoadLevel(0);
+		
+	}
+	
+	
 }

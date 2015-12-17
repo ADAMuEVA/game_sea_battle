@@ -107,7 +107,7 @@ public class FieldOperations : MonoBehaviour {
 			obj.GetComponent<MeshRenderer>().enabled = false;
 		}
 		
-		ValidateFireList();
+		//ValidateFireList();
 		
 		//???? ????? ????? ?????? ?????
 		if (mSelectionLength > 0)
@@ -288,10 +288,10 @@ public class FieldOperations : MonoBehaviour {
 	}
 
 	// ???????? ?? ????????? ????????? ??????? ?? ?????? x, y
-	bool VerifyCell(int x, int y)
-	{
-		return isPossibleShipPos(mSelectionLength, mSelectionHorizontal, x, y);
-	}
+//	bool VerifyCell(int x, int y)
+//	{
+//		//return isPossibleShipPos(mSelectionLength, mSelectionHorizontal, x, y);
+//	}
 
 	// создание различных вспомогательных объектов на поле 
 	void CreateCellObjects(Vector3 start, Vector3 end)
