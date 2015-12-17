@@ -1,9 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GamePvE.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameOrder.cs">
     <Files>
-      <File FileName="Assets\Scripts\FieldOperations.cs" Line="7" Column="2" />
-      <File FileName="Assets\Scripts\GamePvE.cs" Line="19" Column="57" />
+      <File FileName="../project/SeaWar/Assets/Scripts/GameOrder.cs" Line="259" Column="1" />
+      <File FileName="Assets/Scripts/GameOrder.cs" Line="259" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

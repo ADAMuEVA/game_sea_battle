@@ -13,10 +13,9 @@ public class GameOrder : MonoBehaviour {
 	public GameObject CanvasVictory;
 	public GameObject CanvasDefeat;
 	
-
-	GameCamera mGameCamera;
 	FieldOperations mPlayerField;
 	FieldOperations mEnemyField;
+	GameCamera mGameCamera;
 	bool mGameBegun = false;
 	
 	public enum GameState
@@ -57,10 +56,10 @@ public class GameOrder : MonoBehaviour {
 		mEnemyField = EnemyField.GetComponent<FieldOperations>();
 		mGameCamera = GameCamera.GetComponent<GameCamera>();
 	}
-
+	
 	// Update is called once per frame
-	void Update () 
-	{
+	void Update () {
+		
 		// проверка списка задач
 		// если задачи есть
 		// то проверяется, сколько времени осталось для выполнения первой
@@ -84,7 +83,7 @@ public class GameOrder : MonoBehaviour {
 			}
 		}
 	}
-
+	
 	// начать в игре ход игрока
 	public void SetPlayerTurn()
 	{
