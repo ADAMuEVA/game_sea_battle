@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\GameCamera.cs" />
      <Compile Include="Assets\Scripts\GameOptions.cs" />
      <Compile Include="Assets\Scripts\GameOrder.cs" />
+     <Compile Include="Assets\Scripts\GamePvE.cs" />
      <Compile Include="Assets\Scripts\Ship.cs" />
      <None Include="Assets\SampleAssets\Environment\Skyboxes\SkyboxGuidelines.txt" />
      <None Include="Assets\Standard Assets\Environment\Water (Basic)\Shaders\FXWaterBasic.shader" />
