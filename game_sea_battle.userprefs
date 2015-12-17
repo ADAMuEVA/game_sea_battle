@@ -1,9 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/GameOrder.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\GamePvE.cs">
     <Files>
-      <File FileName="../project/SeaWar/Assets/Scripts/GameOrder.cs" Line="259" Column="1" />
-      <File FileName="Assets/Scripts/GameOrder.cs" Line="259" Column="1" />
+      <File FileName="Assets\Scripts\GameCamera.cs" Line="216" Column="1" />
+      <File FileName="Assets\Scripts\GamePvE.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GameOptions.cs" Line="1" Column="1" />
+      <File FileName="..\..\SeaWar\Assets\Scripts\GamePvE.cs" Line="11" Column="2" />
+      <File FileName="Assets\Scripts\GameOrder.cs" Line="259" Column="1" />
+      <File FileName="Assets\Scripts\Ship.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

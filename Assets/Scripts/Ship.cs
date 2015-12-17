@@ -75,46 +75,46 @@ public class Ship : MonoBehaviour {
 		mFieldSize = field;
 		mDepth = 0.0f;
 	}
-	
+
 	// переместить корабль
 	public void Move (bool horizontal, int x, int y)
 	{
 		if (mHorizontal == horizontal &&
-		    mX == x && mY == y)
+			mX == x && mY == y)
 			return;
-		
+
 		mHorizontal = horizontal;
 		mX = x;
 		mY = y;
-		
+
 		RefreshPosition();
 	}
-	
+
 	// обновить положение корабля
 	void RefreshPosition()
 	{
 		// если корабль не на поле, скрыть
 		if(mX == -1 ||
-		   mY == -1)
+			mY == -1)
 		{
 			gameObject.SetActive(false);
 			return;
 		}
-		
+
 		gameObject.SetActive(true);
-		
+
 		// если корабль затоплен, то погружать его пока не достигнет дна
 		if(mSinked)
 		{
 			mDepth -= Time.deltaTime * SinkingTimeCoef;
-			
+
 			if (mDepth < Bottom)
 				mDepth = Bottom;
 		}
-		
+
 		// обновить положение корабля
 		Vector3 offset;
-		
+
 		if (mHorizontal)
 		{
 			offset = new Vector3(
@@ -131,14 +131,14 @@ public class Ship : MonoBehaviour {
 				ShipLengths[(int)mType] * 0.5f * mFieldSize.y);
 			offset += ShipPositionVer[(int)mType];
 		}
-		
+
 		transform.position = new Vector3(
 			mStartPt.x + mFieldSize.x * mX + offset.x,
 			offset.y,
 			mStartPt.z + mFieldSize.y * mY + offset.z);
-		
+
 		transform.localScale = ShipScale[(int)mType];
-		
+
 		if(mHorizontal)
 		{
 			transform.rotation = Quaternion.Euler(ShipRotation[(int)mType]);
@@ -165,25 +165,25 @@ public class Ship : MonoBehaviour {
 	public int GetShipLength()
 	{
 		return ShipLengths[(int)mType];
-	} 
+	}
 
 	// получить тип корабля
 	public Type GetShipType()
 	{
 		return mType;
 	}
-	
+
 	// получить возможное количество короблей типа type
 	public static int GetShipsMaxCount(Type type)
 	{
 		return ShipMaxCounts[(int)type];
 	}
-	
+
 	// получить клетки в которых распологается корабль
 	public List<Vector2> GetCells()
 	{
 		List<Vector2> cells = new List<Vector2>();
-		
+
 		if (mHorizontal)
 		{
 			for (int i = 0; i < ShipLengths[(int)mType]; ++i)
@@ -198,7 +198,7 @@ public class Ship : MonoBehaviour {
 				cells.Add(new Vector2(mX, mY + i));
 			}
 		}
-		
+
 		return cells;
 	}
 
@@ -208,18 +208,12 @@ public class Ship : MonoBehaviour {
 		return mHorizontal;
 	}
 
-	// получить размер коробля типа type
-	public static int GetShipLength(Type type)
-	{
-		return ShipLengths[(int)type];
-	}
-	
 	// получить координаты корабля
 	public int GetX()
 	{
 		return mX;
 	}
-	
+
 	public int GetY()
 	{
 		return mY;
@@ -233,7 +227,7 @@ public class Ship : MonoBehaviour {
 			for (int i = 0; i < ShipLengths[(int)mType]; ++i)
 			{
 				if(cell_x == mX + i &&
-				   cell_y == mY)
+					cell_y == mY)
 				{
 					return true;
 				}
@@ -244,14 +238,20 @@ public class Ship : MonoBehaviour {
 			for (int i = 0; i < ShipLengths[(int)mType]; ++i)
 			{
 				if (cell_x == mX &&
-				    cell_y == mY + i)
+					cell_y == mY + i)
 				{
 					return true;
 				}
 			}
 		}
-		
+
 		return false;
+	}
+
+	// получить размер коробля типа type
+	public static int GetShipLength(Type type)
+	{
+		return ShipLengths[(int)type];
 	}
 
 	// является ли корабль затопленным
@@ -259,19 +259,18 @@ public class Ship : MonoBehaviour {
 	{
 		return mSinked;
 	}
-	
+
 	// затопить корабль
 	public void Sink()
 	{
 		mSinked = true;
-		
+
 		gameObject.SetActive(true);
 	}
-	
+
 	// получить глубину на которой находится корабль
 	public float GetDepth()
 	{
 		return mDepth;
 	}
 }
-

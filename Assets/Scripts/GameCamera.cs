@@ -3,8 +3,8 @@ using System.Collections;
 using UnityEngine.Networking;
 
 public class GameCamera : MonoBehaviour {
-	
-	
+
+
 	public float mSmooth = 2.0f;
 	public enum Position
 	{
@@ -18,10 +18,10 @@ public class GameCamera : MonoBehaviour {
 	public GameObject PlayerField;
 	public GameObject GameObj;
 	public GameObject GameOrder;
-	
+
 	//текущее положение камеры
 	Position mCurrentPosition = Position.Main;
-	
+
 	//позиции и повороты камеры для различного положения
 	Vector3[] mPositions = new Vector3[]{
 		new Vector3(0.04f, 12.5f, -9.3f),
@@ -38,7 +38,7 @@ public class GameCamera : MonoBehaviour {
 	bool mCanvasPlacingLoaded = false;
 	float mAllShipsPlacedTime;
 	bool mAllShipsPlaced = false;
-	
+
 	// Use this for initialization
 	void Start()
 	{
@@ -46,30 +46,30 @@ public class GameCamera : MonoBehaviour {
 		transform.position = mPositions[(int)mCurrentPosition];
 		transform.rotation = Quaternion.Euler(mRotations[(int)mCurrentPosition]);
 		mStartTime = Time.time;
-		
+
 		// создание объекта GameOptions если еще не был создан
 		if (GameOptions.Instance == null)
 		{
 			GameObject.Find("GameOptions").AddComponent<GameOptions>();
 		}
-		
+
 		// в зависимости от того какой режим был выбран в меню
 		// добавляется скрипт GamePvE или GamePvP в объект Game
-		
-		
-		GamePvE gamepve = GameObj.AddComponent<GamePvE>();
-		gamepve.GameOrder = GameOrder;
-		
+
+			
+				GamePvE gamepve = GameObj.AddComponent<GamePvE>();
+				gamepve.GameOrder = GameOrder;
+
 		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+
 		// плавное перемещение камеры в точку где должна находится камера
 		Quaternion target = Quaternion.Euler(
 			mRotations[(int)mCurrentPosition]);
-		
+
 		if (transform.rotation != target)
 		{
 			transform.rotation =
@@ -78,9 +78,9 @@ public class GameCamera : MonoBehaviour {
 					target,
 					Time.deltaTime * mSmooth);
 		}
-		
+
 		if (transform.position !=
-		    mPositions[(int)mCurrentPosition])
+			mPositions[(int)mCurrentPosition])
 		{
 			transform.position =
 				Vector3.Lerp(
@@ -88,87 +88,87 @@ public class GameCamera : MonoBehaviour {
 					mPositions[(int)mCurrentPosition],
 					Time.deltaTime * mSmooth);
 		}
-		
-		
-		
-		// показываем окно для расстановки кораблей
-		if (!mStartedCanvasLoaded && Time.time - mStartTime > 1.0f)
-		{
-			CanvasPlaceBattleships.SetActive(true);
-			mStartedCanvasLoaded = true;
-		}
-		
-		if (mCanvasPlacingLoaded)
-		{
-			GameOrder gameOrder = GameOrder.GetComponent<GameOrder>();
-			
-			if (!gameOrder.isGameBegun)
+
+
+
+			// показываем окно для расстановки кораблей
+			if (!mStartedCanvasLoaded && Time.time - mStartTime > 1.0f)
 			{
-				FieldOperations field_operations = PlayerField.GetComponent<FieldOperations>();
-				if (field_operations.isAllShipsArePlaced)
+				CanvasPlaceBattleships.SetActive(true);
+				mStartedCanvasLoaded = true;
+			}
+
+			if (mCanvasPlacingLoaded)
+			{
+				GameOrder gameOrder = GameOrder.GetComponent<GameOrder>();
+
+				if (!gameOrder.isGameBegun)
 				{
-					
-					//если все корабли расставленны, тогда появляется кнопка - "Начать игру"
-					if (mAllShipsPlaced)
+					FieldOperations field_operations = PlayerField.GetComponent<FieldOperations>();
+					if (field_operations.isAllShipsArePlaced)
 					{
-						if (Time.time - mAllShipsPlacedTime > 1.0f)
+
+						//если все корабли расставленны, тогда появляется кнопка - "Начать игру"
+						if (mAllShipsPlaced)
 						{
-							CanvasBeginGame.SetActive(true);
-							CanvasPlacing.SetActive(false);
+							if (Time.time - mAllShipsPlacedTime > 1.0f)
+							{
+								CanvasBeginGame.SetActive(true);
+								CanvasPlacing.SetActive(false);
+							}
+						}
+						else
+						{
+							mAllShipsPlacedTime = Time.time;
+							mAllShipsPlaced = true;
 						}
 					}
 					else
 					{
-						mAllShipsPlacedTime = Time.time;
-						mAllShipsPlaced = true;
+						CanvasBeginGame.SetActive(false);
+						CanvasPlacing.SetActive(true);
+						BattleshipsPlacing placing = CanvasPlacing.GetComponent<BattleshipsPlacing>();
+						placing.RefreshButtonsTexts();
+						field_operations.RefreshRedPlanes();
+						mAllShipsPlaced = false;
 					}
 				}
 				else
 				{
 					CanvasBeginGame.SetActive(false);
-					CanvasPlacing.SetActive(true);
-					BattleshipsPlacing placing = CanvasPlacing.GetComponent<BattleshipsPlacing>();
-					placing.RefreshButtonsTexts();
-					field_operations.RefreshRedPlanes();
-					mAllShipsPlaced = false;
+					CanvasPlacing.SetActive(false);
+					CanvasPlaceBattleships.SetActive(false);
 				}
 			}
-			else
-			{
-				CanvasBeginGame.SetActive(false);
-				CanvasPlacing.SetActive(false);
-				CanvasPlaceBattleships.SetActive(false);
-			}
 		}
-	}
-	
-	
+
+
 	// изменить положение камеры
 	public void ChangePosition(int pos)
 	{
 		mCurrentPosition = (Position)pos;
 	}
-	
+
 	// скрыть меню с кнопкой "Расставить корабли"
 	public void HideCanvasPlaceBattleships()
 	{
 		CanvasPlaceBattleships.SetActive(false);
 	}
-	
+
 	// скрыть меню расстановки кораблей
 	public void LoadCanvasPlacing()
 	{
 		CanvasPlacing.SetActive(true);
 		mCanvasPlacingLoaded = true;
 	}
-	
+
 	// перейти в главное меню
 	public void LoadMainMenu()
 	{
-		
-		Application.LoadLevel(0);
-		
+
+			Application.LoadLevel(0);
+
 	}
-	
-	
+
+
 }
