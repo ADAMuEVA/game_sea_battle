@@ -4,36 +4,22 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 
 public class MainMenu : MonoBehaviour {
-<<<<<<< HEAD
 
-
+	public GameObject InputFieldIp;
+	public GameObject InputFieldPort;
 	public GameObject CanvasMenu;
+	public GameObject NetworkManager;
 
-
-=======
-	
-	
-	public GameObject CanvasMenu;
-	
-	
->>>>>>> origin/master
 	enum MenuState
 	{
 		Initial = 0,
 		Main = 1,
 		Multiplayer = 2,
 	}
-<<<<<<< HEAD
 
 	// текущее положение камеры
 	MenuState mCurrentMenuState;
 
-=======
-	
-	// текущее положение камеры
-	MenuState mCurrentMenuState;
-	
->>>>>>> origin/master
 	// повороты камеры при различных положениях
 	Vector3[] mStatesRotations = new Vector3[]{
 		new Vector3(30, 0, 0),
@@ -46,60 +32,41 @@ public class MainMenu : MonoBehaviour {
 		new Vector3(0.5f, 0.39f, 0),
 		new Vector3(-0.25f, 0.39f, 0),
 	};
-<<<<<<< HEAD
+	// положения меню сетевой игры при различных положениях камеры
+	Vector3[] mMultiplayerMenuPositions = new Vector3[]{
+		new Vector3(1.26f, -0.17f, 0),
+		new Vector3(1.26f, 0.27f, 0),
+		new Vector3(0.5f, 0.50f, 0),
+	};
 
-
-=======
-	
-	
->>>>>>> origin/master
 	// скорость вращения камеры
 	public float mSmooth = 2.0f;
 	GameObject panelMainMenu;
 	GameObject panelMultiplayerMenu;
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> origin/master
 	void Start()
 	{
 		// устанавливается начальные положения меню и камеры
 		mCurrentMenuState = MenuState.Main;
 		panelMainMenu = GameObject.Find("panelMainMenu");
 		panelMainMenu.transform.position = TranslateCoords(mMainMenuPositions[(int)MenuState.Initial]);
-<<<<<<< HEAD
+		panelMultiplayerMenu = GameObject.Find("panelMultiplayerMenu");
+		panelMultiplayerMenu.transform.position = TranslateCoords(mMultiplayerMenuPositions[(int)MenuState.Initial]);
 
-
-=======
-		
-		
->>>>>>> origin/master
 		if (GameOptions.Instance == null)
 		{
 			GameObject.Find("GameOptions").AddComponent<GameOptions>();
 		}
-<<<<<<< HEAD
 
-
+		GameOptions.Instance.Network = NetworkManager.GetComponent<NetworkManager>();
 	}
 	 
-=======
-		
-		
-	}
-	
->>>>>>> origin/master
 	// обновление положений меню и камеры
 	void Update()
 	{
 		Quaternion target = Quaternion.Euler(
 			mStatesRotations[(int)mCurrentMenuState]);
-<<<<<<< HEAD
 
-=======
-		
->>>>>>> origin/master
 		if(Camera.main.transform.rotation != target)
 		{
 			Camera.main.transform.rotation =
@@ -108,15 +75,9 @@ public class MainMenu : MonoBehaviour {
 					target, 
 					Time.deltaTime * mSmooth);
 		}
-<<<<<<< HEAD
 
 		if (panelMainMenu.transform.position !=
 			TranslateCoords(mMainMenuPositions[(int)mCurrentMenuState]))
-=======
-		
-		if (panelMainMenu.transform.position !=
-		    TranslateCoords(mMainMenuPositions[(int)mCurrentMenuState]))
->>>>>>> origin/master
 		{
 			panelMainMenu.transform.position =
 				Vector3.Lerp(
@@ -124,64 +85,104 @@ public class MainMenu : MonoBehaviour {
 					TranslateCoords(mMainMenuPositions[(int)mCurrentMenuState]),
 					Time.deltaTime * mSmooth);
 		}
-<<<<<<< HEAD
 
-
-
+		if (panelMultiplayerMenu.transform.position !=
+			TranslateCoords(mMultiplayerMenuPositions[(int)mCurrentMenuState]))
+		{
+			panelMultiplayerMenu.transform.position =
+				Vector3.Lerp(
+					panelMultiplayerMenu.transform.position,
+					TranslateCoords(mMultiplayerMenuPositions[(int)mCurrentMenuState]),
+					Time.deltaTime * mSmooth);
+		}
 	}
 
-=======
-		
-		
-		
-	}
-	
->>>>>>> origin/master
 	// преобразование координат относительных в экранные координаты
 	public Vector3 TranslateCoords(Vector3 vec)
 	{
 		return new Vector3(vec.x * Screen.width, vec.y * Screen.height, vec.z);
 	}
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> origin/master
 	// начать игру
 	public void LoadGame()
 	{
+		GameOptions.Instance.Mode = GameOptions.GameMode.PvE;
 		Application.LoadLevel(1);
 	}
-	
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> origin/master
+	// перейти к меню сетевой игры
+	public void LoadMultiplayerMenu()
+	{
+		mCurrentMenuState = MenuState.Multiplayer;
+		EnableMultiplayerMenu();
+	}
+
 	// загрузить основное меню
 	public void LoadMainMenu()
 	{
 		mCurrentMenuState = MenuState.Main;
 	}
-<<<<<<< HEAD
 
-=======
-	
->>>>>>> origin/master
 	// выйти из игры
 	public void Exit()
 	{
 		Application.Quit();
 	}
-<<<<<<< HEAD
+
+	// сделать активными кнопки в меню сетевой игры
+	void EnableMultiplayerMenu()
+	{
+		GameObject.Find("btnHost").GetComponent<Button>().interactable = true;
+		GameObject.Find("btnConnect").GetComponent<Button>().interactable = true;
+		GameObject.Find("btnBack").GetComponent<Button>().interactable = true;
+		GameObject.Find("InputFieldIp").GetComponent<InputField>().interactable = true;
+		GameObject.Find("InputFieldPort").GetComponent<InputField>().interactable = true;
+	}
+
+	// сделать не активными кнопки в меню сетевой игры
+	void DisableMultiplayerMenu()
+	{
+		GameObject.Find("btnHost").GetComponent<Button>().interactable = false;
+		GameObject.Find("btnConnect").GetComponent<Button>().interactable = false;
+		GameObject.Find("btnBack").GetComponent<Button>().interactable = false;
+		GameObject.Find("InputFieldIp").GetComponent<InputField>().interactable = false;
+		GameObject.Find("InputFieldPort").GetComponent<InputField>().interactable = false;
+	}
+
+	// совершить подключение к серверу
+	public void Connect()
+	{
+		string ip;
+		int port;
+		ip = InputFieldIp.GetComponent<InputField>().text;
+		if(!int.TryParse(InputFieldPort.GetComponent<InputField>().text, out port))
+			return;
 
 
+		NetworkManager manager = GameOptions.Instance.Network;
+		manager.networkPort = port;
+		manager.networkAddress = ip;
+		manager.StartClient();
 
+		GameOptions.Instance.Mode = GameOptions.GameMode.PvP;
+		GameOptions.Instance.Server = false;
+		DisableMultiplayerMenu();
+	}
 
-=======
-	
-	
-	
-	
->>>>>>> origin/master
+	// создать сервер
+	public void Host()
+	{
+		int port;
+		if (!int.TryParse(InputFieldPort.GetComponent<InputField>().text, out port))
+			return;
+
+		NetworkManager manager = GameOptions.Instance.Network;
+		manager.networkPort = port;
+		manager.StartServer();
+
+		GameOptions.Instance.Mode = GameOptions.GameMode.PvP;
+		GameOptions.Instance.Server = true;
+		DisableMultiplayerMenu();
+	}
+
 }

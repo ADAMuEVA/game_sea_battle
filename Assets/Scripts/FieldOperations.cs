@@ -221,7 +221,7 @@ public class FieldOperations : MonoBehaviour {
 			//убирает корабль
 			if (mGame.State == GameOrder.GameState.Placing)
 			{
-				if (Input.GetMouseButtonDown(2))
+				if (Input.GetMouseButtonDown(1))
 				{
 					mSelectionLength = 0;
 					mShips.Remove(mPlaceShip);

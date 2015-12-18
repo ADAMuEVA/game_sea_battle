@@ -26,4 +26,9 @@ public class GameOptions : MonoBehaviour
 		PvE,
 	}
 
+	public GameMode Mode = GameMode.PvE;		// режим игры - против компьютера (PvE) или против игрока по сети (PvP)
+	public bool Server = false;					// является ли текущий игрок сервером
+	public NetworkManager Network = null;		// переменная для доступа к параметром сети
+	//public NetworkPlayer Player = null;			// доступ к объекту который осуществляет обмен данными по сети
+
 }
