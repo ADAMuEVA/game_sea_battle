@@ -42,12 +42,12 @@ public class GamePvP : MonoBehaviour
 					if (Random.Range(0, 2) == 0)
 					{
 						mGameOrder.SetPlayerTurn();
-						//SendEnemyTurn();
+						SendEnemyTurn();
 					}
 					else
 					{
 						mGameOrder.SetEnemyTurn();
-						//SendYourTurn();
+						SendYourTurn();
 					}
 
 					mFirstUpdate = false;
@@ -71,6 +71,30 @@ public class GamePvP : MonoBehaviour
 		}
 	}
 
+	//отправка различных команд от одного игрока другому
+	public void SendYourTurn()
+	{
+		NetworkPlayer player = GameOptions.Instance.Player.GetComponent<NetworkPlayer>();
+		player.YourTurn();
+	}
+
+	public void SendEnemyTurn()
+	{
+		NetworkPlayer player = GameOptions.Instance.Player.GetComponent<NetworkPlayer>();
+		player.EnemyTurn();
+	}
+
+	public void SendSetEnemyShip(int type, int x, int y, bool horizontal)
+	{
+		NetworkPlayer player = GameOptions.Instance.Player.GetComponent<NetworkPlayer>();
+		player.SetEnemyShip(type, x, y, horizontal);
+	}
+
+	public void SendAttackCell(int x, int y)
+	{
+		NetworkPlayer player = GameOptions.Instance.Player.GetComponent<NetworkPlayer>();
+		player.AttackCell(x, y);
+	}
 
 	// получение различных команд от другого игрока
 	public void ReceivedYourTurn()
@@ -108,11 +132,11 @@ public class GamePvP : MonoBehaviour
 		foreach (var ship in field.GetShips())
 		{
 			Ship subship = ship.GetComponent<Ship>();
-			//SendSetEnemyShip(
-			//		(int)subship.GetShipType(),
-			//		subship.GetX(),
-			//		subship.GetY(),
-			//		subship.isHorizontal());
+			SendSetEnemyShip(
+					(int)subship.GetShipType(),
+					subship.GetX(),
+					subship.GetY(),
+					subship.isHorizontal());
 		}
 
 		mGameOrder.PlayerField.GetComponent<FieldOperations>().RefreshRedPlanes();
@@ -131,11 +155,11 @@ public class GamePvP : MonoBehaviour
 				res = field.AttackCell(x, y);
 				if (GameOptions.Instance.Server)
 				{
-					//SendAttackCell(x, y);
+					SendAttackCell(x, y);
 				}
 				else
 				{
-					//SendAttackCell(x, y);
+					SendAttackCell(x, y);
 				}
 			});
 			mGameOrder.AddTask(1.0f, () =>

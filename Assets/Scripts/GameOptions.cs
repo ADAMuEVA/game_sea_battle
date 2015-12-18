@@ -30,5 +30,4 @@ public class GameOptions : MonoBehaviour
 	public bool Server = false;					// является ли текущий игрок сервером
 	public NetworkManager Network = null;		// переменная для доступа к параметром сети
 	public NetworkPlayer Player = null;			// доступ к объекту который осуществляет обмен данными по сети
-
 }
