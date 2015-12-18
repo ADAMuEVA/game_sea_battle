@@ -662,7 +662,7 @@ MonoBehaviour:
   m_SendPeerInfo: 0
   m_MaxDelay: .00999999978
   m_LogLevel: 2
-  m_PlayerPrefab: {fileID: 143772, guid: b6983e9035edb184c90327a339021900, type: 2}
+  m_PlayerPrefab: {fileID: 0}
   m_AutoCreatePlayer: 1
   m_PlayerSpawnMethod: 0
   m_OfflineScene: MainMenu
@@ -1741,6 +1741,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59d1cea6893216042aac88499287289b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  InputFieldIp: {fileID: 2112310516}
+  InputFieldPort: {fileID: 80405556}
+  CanvasMenu: {fileID: 1295533538}
+  NetworkManager: {fileID: 491734558}
+  mSmooth: 2
 --- !u!114 &1295533544
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1752,8 +1757,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62c25f5bffbe64334927cb834e3f2eda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanvasMenu: {fileID: 0}
-  mSmooth: 2
 --- !u!1 &1375425916
 GameObject:
   m_ObjectHideFlags: 0

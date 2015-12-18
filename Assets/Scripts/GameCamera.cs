@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
@@ -16,6 +15,7 @@ public class GameCamera : MonoBehaviour {
 	public GameObject CanvasPlaceBattleships;
 	public GameObject CanvasPlacing;
 	public GameObject CanvasBeginGame;
+	public GameObject CanvasWaitingForPlayer;
 	public GameObject PlayerField;
 	public GameObject GameObj;
 	public GameObject GameOrder;
@@ -56,12 +56,22 @@ public class GameCamera : MonoBehaviour {
 		
 		// в зависимости от того какой режим был выбран в меню
 		// добавляется скрипт GamePvE или GamePvP в объект Game
-		
-		
-		GamePvE gamepve = GameObj.AddComponent<GamePvE>();
-		gamepve.GameOrder = GameOrder;
-		
-		
+		switch(GameOptions.Instance.Mode)
+		{
+		case GameOptions.GameMode.PvE:
+			GamePvE gamepve = GameObj.AddComponent<GamePvE>();
+			gamepve.GameOrder = GameOrder;
+			
+			break;
+		case GameOptions.GameMode.PvP:
+			GamePvP gamepvp = GameObj.AddComponent<GamePvP>();
+			gamepvp.GameOrder = GameOrder;
+			gamepvp.CanvasPlaceBattleships = CanvasPlaceBattleships;
+			gamepvp.CanvasPlacing = CanvasPlacing;
+			gamepvp.CanvasBeginGame = CanvasBeginGame;
+			
+			break;
+		}
 	}
 	
 	// Update is called once per frame
@@ -90,59 +100,68 @@ public class GameCamera : MonoBehaviour {
 					Time.deltaTime * mSmooth);
 		}
 		
-		
-		
-		// показываем окно для расстановки кораблей
-		if (!mStartedCanvasLoaded && Time.time - mStartTime > 1.0f)
+		if (!isPlayersReady && !mAllShipsPlaced)
 		{
-			CanvasPlaceBattleships.SetActive(true);
-			mStartedCanvasLoaded = true;
+			// если игра только началась, тогда если текущий игрок - сервер
+			// идет проверка, подключился ли игрок, если еще нет, тогда 
+			// отображается надпись "Ожидание игрока"
+			CanvasWaitingForPlayer.SetActive(true);
 		}
-		
-		if (mCanvasPlacingLoaded)
+		else
 		{
-			GameOrder gameOrder = GameOrder.GetComponent<GameOrder>();
+			CanvasWaitingForPlayer.SetActive(false);
 			
-			if (!gameOrder.isGameBegun)
+			// показываем окно для расстановки кораблей
+			if (!mStartedCanvasLoaded && Time.time - mStartTime > 1.0f)
 			{
-				FieldOperations field_operations = PlayerField.GetComponent<FieldOperations>();
-				if (field_operations.isAllShipsArePlaced)
+				CanvasPlaceBattleships.SetActive(true);
+				mStartedCanvasLoaded = true;
+			}
+			
+			if (mCanvasPlacingLoaded)
+			{
+				GameOrder gameOrder = GameOrder.GetComponent<GameOrder>();
+				
+				if (!gameOrder.isGameBegun)
 				{
-					
-					//если все корабли расставленны, тогда появляется кнопка - "Начать игру"
-					if (mAllShipsPlaced)
+					FieldOperations field_operations = PlayerField.GetComponent<FieldOperations>();
+					if (field_operations.isAllShipsArePlaced)
 					{
-						if (Time.time - mAllShipsPlacedTime > 1.0f)
+						
+						//если все корабли расставленны, тогда появляется кнопка - "Начать игру"
+						if (mAllShipsPlaced)
 						{
-							CanvasBeginGame.SetActive(true);
-							CanvasPlacing.SetActive(false);
+							if (Time.time - mAllShipsPlacedTime > 1.0f)
+							{
+								CanvasBeginGame.SetActive(true);
+								CanvasPlacing.SetActive(false);
+							}
+						}
+						else
+						{
+							mAllShipsPlacedTime = Time.time;
+							mAllShipsPlaced = true;
 						}
 					}
 					else
 					{
-						mAllShipsPlacedTime = Time.time;
-						mAllShipsPlaced = true;
+						CanvasBeginGame.SetActive(false);
+						CanvasPlacing.SetActive(true);
+						BattleshipsPlacing placing = CanvasPlacing.GetComponent<BattleshipsPlacing>();
+						placing.RefreshButtonsTexts();
+						field_operations.RefreshRedPlanes();
+						mAllShipsPlaced = false;
 					}
 				}
 				else
 				{
 					CanvasBeginGame.SetActive(false);
-					CanvasPlacing.SetActive(true);
-					BattleshipsPlacing placing = CanvasPlacing.GetComponent<BattleshipsPlacing>();
-					placing.RefreshButtonsTexts();
-					field_operations.RefreshRedPlanes();
-					mAllShipsPlaced = false;
+					CanvasPlacing.SetActive(false);
+					CanvasPlaceBattleships.SetActive(false);
 				}
-			}
-			else
-			{
-				CanvasBeginGame.SetActive(false);
-				CanvasPlacing.SetActive(false);
-				CanvasPlaceBattleships.SetActive(false);
 			}
 		}
 	}
-	
 	
 	// изменить положение камеры
 	public void ChangePosition(int pos)
@@ -166,10 +185,40 @@ public class GameCamera : MonoBehaviour {
 	// перейти в главное меню
 	public void LoadMainMenu()
 	{
-		
-		Application.LoadLevel(0);
-		
+		if (GameOptions.Instance.Mode == GameOptions.GameMode.PvP)
+		{
+			if (GameOptions.Instance.Server)
+			{
+				GameOptions.Instance.Network.StopHost();
+			}
+			else
+			{
+				GameOptions.Instance.Network.StopClient();
+			}
+		}
+		else
+		{
+			Application.LoadLevel(0);
+		}
 	}
 	
-	
+	// определить, подключен ли игрок к серверу
+	public bool isPlayersReady
+	{
+		get
+		{
+			if (GameOptions.Instance.Mode == GameOptions.GameMode.PvE)
+				return true;
+			
+			if (GameOptions.Instance.Player == null)
+				return false;
+			
+			if(GameOptions.Instance.Player.isServer)
+			{
+				return (NetworkServer.connections.Count >= 1);
+			}
+			
+			return true;
+		}
+	}
 }
