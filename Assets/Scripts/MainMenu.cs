@@ -2,7 +2,10 @@
 using System.Collections;
 using UnityEngine.UI;
 using UnityEngine.Networking;
-
+/// <summary>
+/// Класс Main menu.
+/// Описание сцены меню и движение камеры.
+/// </summary>
 public class MainMenu : MonoBehaviour {
 
 	public GameObject InputFieldIp;
@@ -16,37 +19,52 @@ public class MainMenu : MonoBehaviour {
 		Main = 1,
 		Multiplayer = 2,
 	}
-
-	// текущее положение камеры
+	/// <summary>
+	/// The state of the m current menu.
+	/// текущее положение камеры
+	/// </summary>
 	MenuState mCurrentMenuState;
-
-	// повороты камеры при различных положениях
+	/// <summary>
+	/// The m states rotations.
+	/// повороты камеры при различных положениях
+	/// </summary>
 	Vector3[] mStatesRotations = new Vector3[]{
 		new Vector3(30, 0, 0),
 		new Vector3(-25, 0, 0),
 		new Vector3(-25, 90, 0)
 	};
-	// положения основного меню при различных положениях камеры
+	/// <summary>
+	/// The m main menu positions.
+	/// положения основного меню при различных положениях камеры
+	/// </summary>
 	Vector3[] mMainMenuPositions = new Vector3[]{
 		new Vector3(0.5f, -0.29f, 0),
 		new Vector3(0.5f, 0.39f, 0),
 		new Vector3(-0.25f, 0.39f, 0),
 	};
-	// положения меню сетевой игры при различных положениях камеры
+	/// <summary>
+	/// The m multiplayer menu positions.
+	/// положения меню сетевой игры при различных положениях камеры
+	/// </summary>
 	Vector3[] mMultiplayerMenuPositions = new Vector3[]{
 		new Vector3(1.26f, -0.17f, 0),
 		new Vector3(1.26f, 0.27f, 0),
 		new Vector3(0.5f, 0.50f, 0),
 	};
-
-	// скорость вращения камеры
+	/// <summary>
+	/// The m smooth.
+	/// скорость вращения камеры
+	/// </summary>
 	public float mSmooth = 2.0f;
 	GameObject panelMainMenu;
 	GameObject panelMultiplayerMenu;
 
+	/// <summary>
+	/// Start this instance.
+	/// устанавливается начальные положения меню и камеры 
+	/// </summary>
 	void Start()
 	{
-		// устанавливается начальные положения меню и камеры
 		mCurrentMenuState = MenuState.Main;
 		panelMainMenu = GameObject.Find("panelMainMenu");
 		panelMainMenu.transform.position = TranslateCoords(mMainMenuPositions[(int)MenuState.Initial]);
@@ -60,8 +78,10 @@ public class MainMenu : MonoBehaviour {
 
 		GameOptions.Instance.Network = NetworkManager.GetComponent<NetworkManager>();
 	}
-	 
-	// обновление положений меню и камеры
+	 /// <summary>
+	 /// Update this instance.
+	/// обновление положений меню и камеры
+	 /// </summary>
 	void Update()
 	{
 		Quaternion target = Quaternion.Euler(
@@ -96,40 +116,54 @@ public class MainMenu : MonoBehaviour {
 					Time.deltaTime * mSmooth);
 		}
 	}
-
-	// преобразование координат относительных в экранные координаты
+	/// <summary>
+	/// Translates the coords.
+	/// преобразование координат относительных в экранные координаты
+	/// </summary>
+	/// <returns>The coords.</returns>
+	/// <param name="vec">Vec.</param>
 	public Vector3 TranslateCoords(Vector3 vec)
 	{
 		return new Vector3(vec.x * Screen.width, vec.y * Screen.height, vec.z);
 	}
-
-	// начать игру
+	/// <summary>
+	/// Loads the game.
+	/// начать игру
+	/// </summary>
 	public void LoadGame()
 	{
 		GameOptions.Instance.Mode = GameOptions.GameMode.PvE;
 		Application.LoadLevel(1);
 	}
-
-	// перейти к меню сетевой игры
+	/// <summary>
+	/// Loads the multiplayer menu.
+	/// перейти к меню сетевой игры
+	/// </summary>
 	public void LoadMultiplayerMenu()
 	{
 		mCurrentMenuState = MenuState.Multiplayer;
 		EnableMultiplayerMenu();
 	}
-
-	// загрузить основное меню
+	/// <summary>
+	/// Loads the main menu.
+	/// загрузить основное меню
+	/// </summary>
 	public void LoadMainMenu()
 	{
 		mCurrentMenuState = MenuState.Main;
 	}
-
-	// выйти из игры
+	/// <summary>
+	/// Exit this instance.
+	/// выйти из игры
+	/// </summary>
 	public void Exit()
 	{
 		Application.Quit();
 	}
-
-	// сделать активными кнопки в меню сетевой игры
+	/// <summary>
+	/// Enables the multiplayer menu.
+	/// сделать активными кнопки в меню сетевой игры
+	/// </summary>
 	void EnableMultiplayerMenu()
 	{
 		GameObject.Find("btnHost").GetComponent<Button>().interactable = true;
@@ -138,8 +172,10 @@ public class MainMenu : MonoBehaviour {
 		GameObject.Find("InputFieldIp").GetComponent<InputField>().interactable = true;
 		GameObject.Find("InputFieldPort").GetComponent<InputField>().interactable = true;
 	}
-
-	// сделать не активными кнопки в меню сетевой игры
+	/// <summary>
+	/// Disables the multiplayer menu.
+	/// сделать не активными кнопки в меню сетевой игры
+	/// </summary>
 	void DisableMultiplayerMenu()
 	{
 		GameObject.Find("btnHost").GetComponent<Button>().interactable = false;
@@ -148,8 +184,10 @@ public class MainMenu : MonoBehaviour {
 		GameObject.Find("InputFieldIp").GetComponent<InputField>().interactable = false;
 		GameObject.Find("InputFieldPort").GetComponent<InputField>().interactable = false;
 	}
-
-	// совершить подключение к серверу
+	/// <summary>
+	/// Connect this instance.
+	/// совершить подключение к серверу
+	/// </summary>
 	public void Connect()
 	{
 		string ip;
@@ -168,8 +206,10 @@ public class MainMenu : MonoBehaviour {
 		GameOptions.Instance.Server = false;
 		DisableMultiplayerMenu();
 	}
-
-	// создать сервер
+	/// <summary>
+	/// Host this instance.
+	/// создать сервер
+	/// </summary>
 	public void Host()
 	{
 		int port;

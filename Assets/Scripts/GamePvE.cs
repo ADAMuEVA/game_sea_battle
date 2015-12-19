@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+/// <summary>
+/// Класс Game pve.
+/// Логика игры для игры против компьютера
+/// </summary>
 public class GamePvE : MonoBehaviour {
 
 	public GameObject GameOrder;
@@ -9,10 +12,13 @@ public class GamePvE : MonoBehaviour {
 	GameOrder mGameOrder;
 	bool mGameBegun = false;
 
-	// Use this for initialization
+	/// <summary>
+	/// Start this instance.
+	/// Use this for initialization
+	/// добавление обработчиков событий для объекта GameOrder
+	/// </summary>
 	void Start () {
-
-		// добавление обработчиков событий для объекта GameOrder
+		
 		mGameOrder = GameOrder.GetComponent<GameOrder>();
 		mGameOrder.OnBeginGame += mGameOrder_OnBeginGame;
 		mGameOrder.OnYourTurnBegin += mGameOrder_OnYourTurnBegin;
@@ -21,7 +27,10 @@ public class GamePvE : MonoBehaviour {
 		mGameOrder.OnEnemyTurnEnd += mGameOrder_OnEnemyTurnEnd;
 	}
 
-	// если сейчас ход игрока, тогда игрок выделяет клетку для атаки
+	/// <summary>
+	/// Ms the game order_ on your turn begin.
+	/// если сейчас ход игрока, тогда игрок выделяет клетку для атаки
+	/// </summary>
 	void mGameOrder_OnYourTurnBegin()
 	{
 		FieldOperations field = mGameOrder.EnemyField.GetComponent<FieldOperations>();
@@ -43,8 +52,11 @@ public class GamePvE : MonoBehaviour {
 	{
 		
 	}
-
-	// если ход компьютера, просчет клетки компьютером для удара 
+	 
+	/// <summary>
+	/// Ms the game order_ on enemy turn begin.
+	/// если ход компьютера, просчет клетки компьютером для удара
+	/// </summary>
 	void mGameOrder_OnEnemyTurnBegin()
 	{
 		FieldOperations field = mGameOrder.PlayerField.GetComponent<FieldOperations>();
@@ -62,7 +74,14 @@ public class GamePvE : MonoBehaviour {
 		});
 	}
 
-	// просчет клетки компьютером для удара
+	/// <summary>
+	/// Evaluates the enemy aim.
+	/// просчет клетки компьютером для удара
+	/// определение клеток, где находятся потопленные корабли
+	/// они пропускаются при расчете
+	/// </summary>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	private void EvaluateEnemyAim(out int x, out int y)
 	{
 		FieldOperations field = mGameOrder.PlayerField.GetComponent<FieldOperations>();
@@ -186,8 +205,16 @@ public class GamePvE : MonoBehaviour {
 		public int Y;
 	}
 
-	// атака случайно вверх, вниз, влево, вправо
-	// от клетки i, j
+	/// <summary>
+	/// Attacks the random side.
+	/// атака случайно вверх, вниз, влево, вправо
+	/// от клетки i, j
+	/// </summary>
+	/// <returns><c>true</c>, if random side was attacked, <c>false</c> otherwise.</returns>
+	/// <param name="i">The index.</param>
+	/// <param name="j">J.</param>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	private bool AttackRandomSide(int i, int j, out int x, out int y)
 	{
 		FieldOperations field = mGameOrder.PlayerField.GetComponent<FieldOperations>();
@@ -226,8 +253,15 @@ public class GamePvE : MonoBehaviour {
 		y = aims[num].Y;
 		return true;
 	}
-
-	// определение смежных клеток по горизонтали с попаданиями от клетки i, j
+	/// <summary>
+	/// Checks the horizontal.
+	/// определение смежных клеток по горизонтали с попаданиями от клетки i, j
+	/// </summary>
+	/// <returns><c>true</c>, if horizontal was checked, <c>false</c> otherwise.</returns>
+	/// <param name="i">The index.</param>
+	/// <param name="j">J.</param>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	private bool CheckHorizontal(int i, int j, out int x, out int y)
 	{
 		FieldOperations field = mGameOrder.PlayerField.GetComponent<FieldOperations>();
@@ -286,8 +320,15 @@ public class GamePvE : MonoBehaviour {
 
 		return true;
 	}
-
-	// определение смежных клеток по вертикали с попаданиями от клетки i, j
+	/// <summary>
+	/// Checks the vertical.
+	/// определение смежных клеток по вертикали с попаданиями от клетки i, j
+	/// </summary>
+	/// <returns><c>true</c>, if vertical was checked, <c>false</c> otherwise.</returns>
+	/// <param name="i">The index.</param>
+	/// <param name="j">J.</param>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	private bool CheckVertical(int i, int j, out int x, out int y)
 	{
 		FieldOperations field = mGameOrder.PlayerField.GetComponent<FieldOperations>();
@@ -351,8 +392,10 @@ public class GamePvE : MonoBehaviour {
 	{
 		
 	}
-	
-	// Update is called once per frame
+	/// <summary>
+	/// Update this instance.
+	/// Update is called once per frame
+	/// </summary>
 	void Update () {
 
 		if (mGameBegun)
@@ -368,8 +411,12 @@ public class GamePvE : MonoBehaviour {
 		public int Y;
 		public bool Horizontal;
 	}
-
-	// определение списка возможных позиций для корабля типа type на поле
+	/// <summary>
+	/// Gets the possible poitions.
+	/// определение списка возможных позиций для корабля типа type на поле
+	/// </summary>
+	/// <returns>The possible poitions.</returns>
+	/// <param name="type">Type.</param>
 	private List<ShipPos> GetPossiblePoitions(int type)
 	{
 		List<ShipPos> pos = new List<ShipPos>();
@@ -395,9 +442,11 @@ public class GamePvE : MonoBehaviour {
 		return pos;
 	}
 
-
-	// когда игрок расставил свои корабли
-	// компьютер тоже расставляет свои корабли
+	/// <summary>
+	/// Ms the game order_ on begin game.
+	/// когда игрок расставил свои корабли
+	/// компьютер тоже расставляет свои корабли
+	/// </summary>
 	void mGameOrder_OnBeginGame()
 	{
 		mGameBegun = true;

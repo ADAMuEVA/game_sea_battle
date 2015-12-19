@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+/// <summary>
+/// Класс Game order.
+/// Отвечает за порядок действий в игре
+/// </summary>
 public class GameOrder : MonoBehaviour {
 
 	public GameObject PlayerField;
@@ -24,11 +27,16 @@ public class GameOrder : MonoBehaviour {
 		PlayerTurn,
 		EnemyTurn,
 	};
-
 	GameState mGameState = GameState.Placing;
 
 	public delegate void TaskHandler();
-
+	/// <summary>
+	/// установлено ли InitialTime
+	/// время начала задачи
+	/// время до выполнения задачи
+	/// функция которую нужно выполнить
+	/// когда пройдет время Time
+	/// </summary>
 	class Task
 	{
 		public bool Initialized = false;	// установлено ли InitialTime
@@ -44,26 +52,33 @@ public class GameOrder : MonoBehaviour {
 			Handler = handler;
 		}
 	}
-
-	// список задач, которые нужно выполнить по истечении времени
+	/// <summary>
+	/// The m tasks.
+	/// список задач, которые нужно выполнить по истечении времени
+	/// </summary>
 	List<Task> mTasks = new List<Task>();
 
-
-	// Use this for initialization
+	/// <summary>
+	/// Start this instance.
+	/// Use this for initialization
+	/// </summary>
 	void Start()
 	{
 		mPlayerField = PlayerField.GetComponent<FieldOperations>();
 		mEnemyField = EnemyField.GetComponent<FieldOperations>();
 		mGameCamera = GameCamera.GetComponent<GameCamera>();
 	}
-	
-	// Update is called once per frame
+	/// <summary>
+	/// Update this instance.
+	/// Update is called once per frame
+	/// проверка списка задач
+	/// если задачи есть
+	/// то проверяется, сколько времени осталось для выполнения первой
+	/// если время пришло, выполняется первая задача и удаляется из списка
+	/// </summary>
 	void Update () {
 
-		// проверка списка задач
-		// если задачи есть
-		// то проверяется, сколько времени осталось для выполнения первой
-		// если время пришло, выполняется первая задача и удаляется из списка
+
 		if(mTasks.Count > 0)
 		{
 			Task task = mTasks[0];
@@ -83,8 +98,10 @@ public class GameOrder : MonoBehaviour {
 			}
 		}
 	}
-
-	// начать в игре ход игрока
+	/// <summary>
+	/// Sets the player turn.
+	/// начать в игре ход игрока
+	/// </summary>
 	public void SetPlayerTurn()
 	{
 		mGameState = GameState.PlayerTurn;
@@ -103,8 +120,10 @@ public class GameOrder : MonoBehaviour {
 			YourTurnBegin();
 		}));
 	}
-
-	// начать в игре ход противника
+	/// <summary>
+	/// Sets the enemy turn.
+	/// начать в игре ход противника
+	/// </summary>
 	public void SetEnemyTurn()
 	{
 		mGameState = GameState.EnemyTurn;
@@ -132,21 +151,35 @@ public class GameOrder : MonoBehaviour {
 		}
 	}
 
-
-	// события:
-	// начало игры
+	/// <summary>
+	/// Events.
+	/// события:
+	/// начало игры
+	/// </summary>
 	public delegate void BeginGameHandler();
 	public event BeginGameHandler OnBeginGame;
-	// начало ходу игрока
+	/// <summary>
+	/// Occurs when on your turn begin.
+	/// начало ходу игрока
+	/// </summary>
 	public delegate void YourTurnBeginHandler();
 	public event YourTurnBeginHandler OnYourTurnBegin;
-	// конец хода игрока
+	/// <summary>
+	/// Occurs when on your turn end
+	/// конец хода игрока.
+	/// </summary>
 	public delegate void YourTurnEndHandler(bool succ);
 	public event YourTurnEndHandler OnYourTurnEnd;
-	// начало хода противника
+	/// <summary>
+	/// Occurs when on enemy turn begin.
+	/// начало хода противника
+	/// </summary>
 	public delegate void EnemyTurnBeginHandler();
 	public event EnemyTurnBeginHandler OnEnemyTurnBegin;
-	// конец хода противника
+	/// <summary>
+	/// Occurs when on enemy turn end.
+	/// конец хода противника
+	/// </summary>
 	public delegate void EnemyTurnEndHandler(bool succ);
 	public event EnemyTurnEndHandler OnEnemyTurnEnd;
 
@@ -155,14 +188,19 @@ public class GameOrder : MonoBehaviour {
 		mGameBegun = true;
 		OnBeginGame();
 	}
-
-	// действия в начале действия игрока
+	/// <summary>
+	/// Yours the turn begin.
+	/// действия в начале действия игрока
+	/// </summary>
 	public void YourTurnBegin()
 	{
 		OnYourTurnBegin();
 	}
-
-	// действия в конце хода игрока (succ = true если было попадание)
+	/// <summary>
+	/// Yours the turn end.
+	/// действия в конце хода игрока (succ = true если было попадание)
+	/// </summary>
+	/// <param name="succ">If set to <c>true</c> succ.</param>
 	public void YourTurnEnd(bool succ)
 	{
 		OnYourTurnEnd(succ);
@@ -191,14 +229,19 @@ public class GameOrder : MonoBehaviour {
 			SetEnemyTurn();
 		}
 	}
-
-	// действия в начале действия противника
+	/// <summary>
+	/// Enemies the turn begin.
+	/// действия в начале действия противника
+	/// </summary>
 	public void EnemyTurnBegin()
 	{
 		OnEnemyTurnBegin();
 	}
-
-	// действия в конце хода противника (succ = true если было попадание)
+	/// <summary>
+	/// Enemies the turn end.
+	/// действия в конце хода противника (succ = true если было попадание)
+	/// </summary>
+	/// <param name="succ">If set to <c>true</c> succ.</param>
 	public void EnemyTurnEnd(bool succ)
 	{
 		OnEnemyTurnEnd(succ);
@@ -227,14 +270,21 @@ public class GameOrder : MonoBehaviour {
 			SetPlayerTurn();
 		}
 	}
-
-	// добавить задачу в конец списка
+	/// <summary>
+	/// Adds the task.
+	/// добавить задачу в конец списка
+	/// </summary>
+	/// <param name="time">Time.</param>
+	/// <param name="handler">Handler.</param>
 	public void AddTask(float time, TaskHandler handler)
 	{
 		mTasks.Add(new Task(time, handler));
 	}
-
-	// закончить ход (succ = true если попадание)
+	/// <summary>
+	/// Ends the turn.
+	/// закончить ход (succ = true если попадание)
+	/// </summary>
+	/// <param name="succ">If set to <c>true</c> succ.</param>
 	public void EndTurn(bool succ)
 	{
 		if(State == GameState.PlayerTurn)
@@ -246,8 +296,11 @@ public class GameOrder : MonoBehaviour {
 			EnemyTurnEnd(succ);
 		}
 	}
-
-	// началась ли игра
+	/// <summary>
+	/// Gets a value indicating whether this <see cref="GameOrder"/> is game begun.
+	/// началась ли игра
+	/// </summary>
+	/// <value><c>true</c> if is game begun; otherwise, <c>false</c>.</value>
 	public bool isGameBegun
 	{
 		get

@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
-
+/// <summary>
+/// Класс Game camera.
+/// Поведение камеры и вывод различных канвасов
+/// </summary>
 public class GameCamera : MonoBehaviour {
 
 
@@ -19,11 +22,15 @@ public class GameCamera : MonoBehaviour {
 	public GameObject PlayerField;
 	public GameObject GameObj;
 	public GameObject GameOrder;
-
-	//текущее положение камеры
+	/// <summary>
+	/// The m current position.
+	/// текущее положение камеры
+	/// </summary>
 	Position mCurrentPosition = Position.Main;
-
-	//позиции и повороты камеры для различного положения
+	/// <summary>
+	/// The m positions.
+	/// позиции и повороты камеры для различного положения
+	/// </summary>
 	Vector3[] mPositions = new Vector3[]{
 		new Vector3(0.04f, 12.5f, -9.3f),
 		new Vector3(8.0f, 12.5f, -3.7f),
@@ -39,7 +46,14 @@ public class GameCamera : MonoBehaviour {
 	bool mCanvasPlacingLoaded = false;
 	float mAllShipsPlacedTime;
 	bool mAllShipsPlaced = false;
-
+	/// <summary>
+	/// Start this instance.
+	/// Use this for initializati
+	/// установка начального положения камеры
+	/// создание объекта GameOptions если еще не был создан
+	/// в зависимости от того какой режим был выбран в меню
+	/// добавляется скрипт GamePvE или GamePvP в объект Game
+	/// </summary>
 	// Use this for initialization
 	void Start()
 	{
@@ -73,7 +87,16 @@ public class GameCamera : MonoBehaviour {
 				break;
 		}
 	}
-	
+	/// <summary>
+	/// Update this instance.
+	/// Update is called once per fram
+	/// плавное перемещение камеры в точку где должна находится камера
+	/// если игра только началась, тогда если текущий игрок - сервер
+	/// идет проверка, подключился ли игрок, если еще нет, тогда 
+	/// отображается надпись "Ожидание игрока"
+	/// показываем окно для расстановки кораблей
+	/// если все корабли расставленны, тогда появляется кнопка - "Начать игру"
+	/// </summary>
 	// Update is called once per frame
 	void Update () {
 
@@ -162,27 +185,36 @@ public class GameCamera : MonoBehaviour {
 			}
 		}
 	}
-
-	// изменить положение камеры
+	/// <summary>
+	/// Changes the position.
+	/// изменить положение камеры
+	/// </summary>
+	/// <param name="pos">Position.</param>
 	public void ChangePosition(int pos)
 	{
 		mCurrentPosition = (Position)pos;
 	}
-
-	// скрыть меню с кнопкой "Расставить корабли"
+	/// <summary>
+	/// Hides the canvas place battleships.
+	/// скрыть меню с кнопкой "Расставить корабли"
+	/// </summary>
 	public void HideCanvasPlaceBattleships()
 	{
 		CanvasPlaceBattleships.SetActive(false);
 	}
-
-	// скрыть меню расстановки кораблей
+	/// <summary>
+	/// Loads the canvas placing.
+	/// скрыть меню расстановки кораблей
+	/// </summary>
 	public void LoadCanvasPlacing()
 	{
 		CanvasPlacing.SetActive(true);
 		mCanvasPlacingLoaded = true;
 	}
-
-	// перейти в главное меню
+	/// <summary>
+	/// Loads the main menu.
+	/// перейти в главное меню
+	/// </summary>
 	public void LoadMainMenu()
 	{
 		if (GameOptions.Instance.Mode == GameOptions.GameMode.PvP)
@@ -201,8 +233,11 @@ public class GameCamera : MonoBehaviour {
 			Application.LoadLevel(0);
 		}
 	}
-
-	// определить, подключен ли игрок к серверу
+	/// <summary>
+	/// Gets a value indicating whether this <see cref="GameCamera"/> is players ready.
+	/// определить, подключен ли игрок к серверу
+	/// </summary>
+	/// <value><c>true</c> if is players ready; otherwise, <c>false</c>.</value>
 	public bool isPlayersReady
 	{
 		get

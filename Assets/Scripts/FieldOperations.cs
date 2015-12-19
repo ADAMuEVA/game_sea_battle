@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+/// <summary>
+/// Класс Field operations.
+/// Все необходимые действия с игровым полем.
+/// </summary>
 public class FieldOperations : MonoBehaviour {
 
 	public const int FieldsHorCount = 10;
@@ -58,7 +61,12 @@ public class FieldOperations : MonoBehaviour {
 
 	const float FirePosY = 0.5f;
 	
-
+	/// <summary>
+	/// Start this instance.
+	/// Use this for initialization
+	/// высчитывание размеров клеток и положения поля
+	/// создание различных вспомогательных объектов для поля - клетки, красные рамки, точки
+	/// </summary>
 	// Use this for initialization
 	void Start () {
 
@@ -97,7 +105,20 @@ public class FieldOperations : MonoBehaviour {
 
 		LastCell.GetComponent<MeshRenderer>().enabled = false;
 	}
-	
+	/// <summary>
+	/// Update this instance.
+	/// Update is called once per frame
+	/// если стоит режим выбора ячеек
+	/// при нажатии средней кнопки мыши - поворот корабля
+	/// просчет попадания в клетку
+	/// если расстановка кораблей - проверка, можно ли поставить корабль
+	/// перемещение корабля
+	/// при нажатии первой кнопки мыши - корабль помещается на поле
+	/// скрывается корабль
+	/// если идет бой, проверка, можно ли выбрать данную клетку для удара
+	/// при нажатии первой кнопки мыши - производится удар
+	/// если не выбран кораблья чтоб поставить на поле и нажата вторая кнопка мыши проверяется выбран ли какой то корабль на поле если корабль выбран, то он удаляется
+	/// </summary>
 	// Update is called once per frame
 	void Update () {
 
@@ -285,14 +306,23 @@ public class FieldOperations : MonoBehaviour {
 		}
 
 	}
-
-	// возможно ли поставить выбранный корабль на клетке x, y
+	/// <summary>
+	/// Verifies the cell.
+	/// возможно ли поставить выбранный корабль на клетке x, y
+	/// </summary>
+	/// <returns><c>true</c>, if cell was verifyed, <c>false</c> otherwise.</returns>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	bool VerifyCell(int x, int y)
 	{
 		return isPossibleShipPos(mSelectionLength, mSelectionHorizontal, x, y);
 	}
-
-	// создание различных вспомогательных объектов на поле - рамок, точек, клеток
+	/// <summary>
+	/// Creates the cell objects.
+	/// создание различных вспомогательных объектов на поле - рамок, точек, клеток
+	/// </summary>
+	/// <param name="start">Start.</param>
+	/// <param name="end">End.</param>
 	void CreateCellObjects(Vector3 start, Vector3 end)
 	{
 		for (int i = 0; i < FieldsHorCount; ++i)
@@ -343,8 +373,11 @@ public class FieldOperations : MonoBehaviour {
 
 		return obj;
 	}
-
-	//выбрать режим установки корабля на поле
+	/// <summary>
+	/// Places the ship.
+	/// выбрать режим установки корабля на поле
+	/// </summary>
+	/// <param name="itype">Itype.</param>
 	public void PlaceShip(int itype)
 	{
 		BattleshipsPlacing placing = uiPlacing.GetComponent<BattleshipsPlacing>();
@@ -399,8 +432,15 @@ public class FieldOperations : MonoBehaviour {
 		RefreshRedPlanes();
 		RefreshBusyCells();
 	}
-
-	//поставить кораблья на определенной клетке, в определенном положении
+	/// <summary>
+	/// Places the ship.
+	/// поставить кораблья на определенной клетке, в определенном положении
+	/// </summary>
+	/// <param name="itype">Itype.</param>
+	/// <param name="horizontal">If set to <c>true</c> horizontal.</param>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
+	/// <param name="visible">If set to <c>true</c> visible.</param>
 	public void PlaceShip(int itype, bool horizontal, int x, int y, bool visible)
 	{
 		BattleshipsPlacing placing = uiPlacing.GetComponent<BattleshipsPlacing>();
@@ -438,9 +478,16 @@ public class FieldOperations : MonoBehaviour {
 		mShips.Add(ship);
 		RefreshBusyCells();
 	}
-
-	// определенить, можно ли поставить корабль с размером len и положение 
-	// horizontal в клетке x, y
+	/// <summary>
+	/// Ises the possible ship position.
+	/// определенить, можно ли поставить корабль с размером len и положение 
+	/// horizontal в клетке x, y
+	/// </summary>
+	/// <returns><c>true</c>, if possible ship position was ised, <c>false</c> otherwise.</returns>
+	/// <param name="len">Length.</param>
+	/// <param name="horizontal">If set to <c>true</c> horizontal.</param>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	public bool isPossibleShipPos(int len, bool horizontal, int x, int y)
 	{
 		if (x < 0 || x >= FieldsHorCount ||
@@ -492,8 +539,10 @@ public class FieldOperations : MonoBehaviour {
 
 		return true;
 	}
-
-	// определение занятых клеток, так же занятыми отмечаются смежные клетки
+	/// <summary>
+	/// Refreshs the busy cells.
+	/// определение занятых клеток, так же занятыми отмечаются смежные клетки
+	/// </summary>
 	public void RefreshBusyCells()
 	{
 		for (int i = 0; i < FieldsHorCount; ++i)
@@ -541,8 +590,10 @@ public class FieldOperations : MonoBehaviour {
 			}
 		}
 	}
-
-	// размещение различных вспомогательных объектов на поле
+	/// <summary>
+	/// Refreshs the red planes.
+	/// размещение различных вспомогательных объектов на поле
+	/// </summary>
 	public void RefreshRedPlanes()
 	{
 		foreach (var plane in mRedPlaneObjects)
@@ -615,8 +666,12 @@ public class FieldOperations : MonoBehaviour {
 			}
 		}
 	}
-
-	//посчитать количество кораблей типа type на поле
+	/// <summary>
+	/// Gets the type of the ships count by.
+	/// посчитать количество кораблей типа type на поле
+	/// </summary>
+	/// <returns>The ships count by type.</returns>
+	/// <param name="type">Type.</param>
 	public int GetShipsCountByType(Ship.Type type)
 	{
 		int res = 0;
@@ -633,8 +688,11 @@ public class FieldOperations : MonoBehaviour {
 
 		return res;
 	}
-
-	//определить, все ли корабли установлены на поле
+	/// <summary>
+	/// Gets a value indicating whether this <see cref="FieldOperations"/> is all ships are placed.
+	/// определить, все ли корабли установлены на поле
+	/// </summary>
+	/// <value><c>true</c> if is all ships are placed; otherwise, <c>false</c>.</value>
 	public bool isAllShipsArePlaced 
 	{
 		get
@@ -650,18 +708,27 @@ public class FieldOperations : MonoBehaviour {
 				(mPlaceShip == null);
 		}
 	}
-	
-	// сделать режим выбора ячейки для удара
-	// когда удар будет совершен игроком
-	// вызовется функция записанная в handler
+
+	/// <summary>
+	/// Selects the aim.
+	/// сделать режим выбора ячейки для удара
+	/// когда удар будет совершен игроком
+	/// вызовется функция записанная в handler
+	/// </summary>
+	/// <param name="handler">Handler.</param>
 	public void SelectAim(AimSelectedHandler handler)
 	{
 		mAimSelectHandler = handler;
 		mSelectionLength = 1;
 		mSelectionHorizontal = true;
 	}
-
-	//определить, находится ли корабль на клетке x, y
+	/// <summary>
+	/// Ises the cell belongs ship.
+	/// определить, находится ли корабль на клетке x, y
+	/// </summary>
+	/// <returns><c>true</c>, if cell belongs ship was ised, <c>false</c> otherwise.</returns>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	public bool isCellBelongsShip(int x, int y)
 	{
 		foreach(var ship in mShips)
@@ -690,8 +757,13 @@ public class FieldOperations : MonoBehaviour {
 
 		return false;
 	}
-
-	// определить на какой глубине находится корабль в клетке x, y
+	/// <summary>
+	/// Gets the depth of ship on cell.
+	/// определить на какой глубине находится корабль в клетке x, y
+	/// </summary>
+	/// <returns>The depth of ship on cell.</returns>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	public float GetDepthOfShipOnCell(int x, int y)
 	{
 		foreach (var ship in mShips)
@@ -720,8 +792,13 @@ public class FieldOperations : MonoBehaviour {
 
 		return 0.0f;
 	}
-	
-	// определить, есть ли в клетке x, y потопленный корабль 
+	/// <summary>
+	/// Ises the cell belongs sinked ship.
+	/// определить, есть ли в клетке x, y потопленный корабль 
+	/// </summary>
+	/// <returns><c>true</c>, if cell belongs sinked ship was ised, <c>false</c> otherwise.</returns>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	public bool isCellBelongsSinkedShip(int x, int y)
 	{
 		foreach(var ship in mShips)
@@ -754,9 +831,15 @@ public class FieldOperations : MonoBehaviour {
 		return false;
 	}
 
-	// атаковать клетку x, y
-	// и возвращается значение true - если было попадение
-	// false - если промах
+	/// <summary>
+	/// Attacks the cell.
+	/// атаковать клетку x, y
+	/// и возвращается значение true - если было попадение
+	/// false - если промах
+	/// </summary>
+	/// <returns><c>true</c>, if cell was attacked, <c>false</c> otherwise.</returns>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	public bool AttackCell(int x, int y)
 	{
 		mAttackedCells[x, y] = true;
@@ -773,9 +856,12 @@ public class FieldOperations : MonoBehaviour {
 		return isCellBelongsShip(x, y);
 	}
 
-	// найти потопленные корабли на поле
-	// если найдены, тогда смежные клетки отмечаются как атакованные
-	// и корабль отмечается как потопленный
+	/// <summary>
+	/// Checks the sinked ships.
+	/// найти потопленные корабли на поле
+	/// если найдены, тогда смежные клетки отмечаются как атакованные
+	/// и корабль отмечается как потопленный
+	/// </summary>
 	private void CheckSinkedShips()
 	{
 		foreach (var ship in mShips)
@@ -845,8 +931,11 @@ public class FieldOperations : MonoBehaviour {
 			}
 		}
 	}
-
-	//определить, все ли корабли потоплены
+	/// <summary>
+	/// Ises the cleared.
+	/// определить, все ли корабли потоплены
+	/// </summary>
+	/// <returns><c>true</c>, if cleared was ised, <c>false</c> otherwise.</returns>
 	public bool isCleared()
 	{
 		bool res = true;
@@ -864,14 +953,22 @@ public class FieldOperations : MonoBehaviour {
 
 		return res;
 	}
-
-	// вернуть массив кораблей расположенных на поле
+	/// <summary>
+	/// Gets the ships.
+	/// вернуть массив кораблей расположенных на поле
+	/// </summary>
+	/// <returns>The ships.</returns>
 	public IEnumerable<GameObject> GetShips()
 	{
 		return mShips;
 	}
-
-	// определить, была ли клетка x, y атакованна
+	/// <summary>
+	/// Ises the cell attacked.
+	/// определить, была ли клетка x, y атакованна
+	/// </summary>
+	/// <returns><c>true</c>, if cell attacked was ised, <c>false</c> otherwise.</returns>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	public bool isCellAttacked(int x, int y)
 	{
 		if (x < 0 || x >= FieldsHorCount ||
@@ -880,8 +977,13 @@ public class FieldOperations : MonoBehaviour {
 
 		return mAttackedCells[x, y];
 	}
-
-	// проверить, есть ли на клетке x, y огонь
+	/// <summary>
+	/// Checks the fire exist.
+	/// проверить, есть ли на клетке x, y огонь
+	/// </summary>
+	/// <returns><c>true</c>, if fire exist was checked, <c>false</c> otherwise.</returns>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	bool CheckFireExist(int x, int y)
 	{
 		for (int i = 0; i < mFireList.Count; ++i)
@@ -894,8 +996,12 @@ public class FieldOperations : MonoBehaviour {
 
 		return false;
 	}
-
-	// добавить огонь в клетку x, y
+	/// <summary>
+	/// Adds the fire.
+	/// добавить огонь в клетку x, y
+	/// </summary>
+	/// <param name="x">The x coordinate.</param>
+	/// <param name="y">The y coordinate.</param>
 	void AddFire(int x, int y)
 	{
 		if (!CheckFireExist(x, y))
@@ -910,9 +1016,12 @@ public class FieldOperations : MonoBehaviour {
 		}
 	}
 
-	// убрать лишний огонь - на затанувших кораблях
-	// и добавить огонь на клетках где есть попадание
-	// если там еще нет огня
+	/// <summary>
+	/// Validates the fire list.
+	/// убрать лишний огонь - на затанувших кораблях
+	/// и добавить огонь на клетках где есть попадание
+	/// если там еще нет огня
+	/// </summary>
 	void ValidateFireList()
 	{
 		for(int i = 0; i < mFireList.Count; ++i)

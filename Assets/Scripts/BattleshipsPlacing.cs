@@ -1,12 +1,18 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
-
+/// <summary>
+/// Класс Battleships placing.
+/// Обработчик канваса(Canvas) для расстановки кораблей.
+/// </summary>
 public class BattleshipsPlacing : MonoBehaviour {
 
 	public GameObject PlayerField;
 	FieldOperations mFieldOperations;
-
+	/// <summary>
+	/// Start this instance.
+	/// Use this for initialization
+	/// </summary>
 	// Use this for initialization
 	void Start () {
 		mFieldOperations = PlayerField.GetComponent<FieldOperations>();
@@ -17,8 +23,10 @@ public class BattleshipsPlacing : MonoBehaviour {
 	void Update () {
 		
 	}
-
-	//обновление надписей на кнопках при расстановке кораблей
+	/// <summary>
+	/// Refreshs the buttons texts.
+	/// обновление надписей на кнопках при расстановке кораблей
+	/// </summary>
 	public void RefreshButtonsTexts()
 	{
 		if (mFieldOperations != null)

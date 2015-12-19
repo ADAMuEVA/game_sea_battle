@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
-
+/// <summary>
+/// Класс Game pvp.
+/// Скрипт для описания действия игры против
+/// другого игрока в сети.
+/// Совместно с скриптом NetworkPlayer
+/// </summary>
 public class GamePvP : MonoBehaviour
 {
 
@@ -15,11 +20,13 @@ public class GamePvP : MonoBehaviour
 	public GameObject CanvasBeginGame;
 	bool? mStartWithYourTurn;
 	bool mFirstUpdate = true;
-
+	/// <summary>
+	/// Start this instance.
+	/// указываются обработчики событий объекта GameOrder
+	/// </summary>
 	void Start ()
 	{
 
-		// указываются обработчики событий объекта GameOrder
 		mGameOrder = GameOrder.GetComponent<GameOrder>();
 		mGameOrder.OnBeginGame += mGameOrder_OnBeginGame;
 		mGameOrder.OnYourTurnBegin += mGameOrder_OnYourTurnBegin;
@@ -28,7 +35,11 @@ public class GamePvP : MonoBehaviour
 		mGameOrder.OnEnemyTurnEnd += mGameOrder_OnEnemyTurnEnd;
 	}
 	
-
+	/// <summary>
+	/// Update this instance.
+	/// если сервер, то случайным образом выбирается чей ход и отправляется на клиент
+	/// если клиент, тогда ожидается выбор чей ход от сервера
+	/// </summary>
 	void Update () 
 	{
 		if (mGameBegun)
@@ -70,8 +81,10 @@ public class GamePvP : MonoBehaviour
 			}
 		}
 	}
-
-	//отправка различных команд от одного игрока другому
+	/// <summary>
+	/// Sends your turn.
+	/// отправка различных команд от одного игрока другому
+	/// </summary>
 	public void SendYourTurn()
 	{
 		NetworkPlayer player = GameOptions.Instance.Player.GetComponent<NetworkPlayer>();
@@ -95,8 +108,10 @@ public class GamePvP : MonoBehaviour
 		NetworkPlayer player = GameOptions.Instance.Player.GetComponent<NetworkPlayer>();
 		player.AttackCell(x, y);
 	}
-
-	// получение различных команд от другого игрока
+	/// <summary>
+	/// Receiveds your turn.
+	/// получение различных команд от другого игрока
+	/// </summary>
 	public void ReceivedYourTurn()
 	{
 		mStartWithYourTurn = true;
@@ -122,8 +137,10 @@ public class GamePvP : MonoBehaviour
 		res = field.AttackCell(x, y);
 		mGameOrder.EndTurn(res);
 	}
-
-	// при начале игры все корабли отправляются оппоненту
+	/// <summary>
+	/// Ms the game order_ on begin game.
+	/// при начале игры все корабли отправляются оппоненту
+	/// </summary>
 	void mGameOrder_OnBeginGame()
 	{
 		mGameBegun = true;
@@ -141,9 +158,12 @@ public class GamePvP : MonoBehaviour
 
 		mGameOrder.PlayerField.GetComponent<FieldOperations>().RefreshRedPlanes();
 	}
-
-	// когда ход игрока, игрок выбирает клетку для атаки
-	// и x, y отправляется другому игроку
+	
+	/// <summary>
+	/// Ms the game order_ on your turn begin.
+	/// когда ход игрока, игрок выбирает клетку для атаки
+	/// и x, y отправляется другому игроку
+	/// </summary>
 	void mGameOrder_OnYourTurnBegin()
 	{
 		FieldOperations field = mGameOrder.EnemyField.GetComponent<FieldOperations>();

@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
-
+/// <summary>
+/// Отвечает за прием и передачу данных по сети.
+/// </summary>
 public class NetworkPlayer : NetworkBehaviour {
 
 	GameObject mGame = null;
@@ -21,8 +23,9 @@ public class NetworkPlayer : NetworkBehaviour {
 
 	}
 
-
-	// обмен командами по сети
+	/// <summary>
+	/// обмен командами по сети
+	/// </summary>
 
 	[ClientRpc]
 	public void RpcYourTurn()
