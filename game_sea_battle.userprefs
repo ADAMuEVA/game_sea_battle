@@ -1,10 +1,17 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/NetworkPlayer.cs">
+  <MonoDevelop.Ide.Workspace />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/BattleshipsPlacing.cs">
     <Files>
-      <File FileName="Assets/Scripts/GameCamera.cs" Line="213" Column="1" />
-      <File FileName="Assets/Scripts/MainMenu.cs" Line="61" Column="1" />
-      <File FileName="Assets/Scripts/NetworkPlayer.cs" Line="15" Column="1" />
+      <File FileName="Assets/Scripts/BattleshipsPlacing.cs" Line="28" Column="61" />
+      <File FileName="Assets/Scripts/FieldOperations.cs" Line="1023" Column="6" />
+      <File FileName="Assets/Scripts/GameCamera.cs" Line="238" Column="46" />
+      <File FileName="Assets/Scripts/GameOptions.cs" Line="36" Column="74" />
+      <File FileName="Assets/Scripts/GameOrder.cs" Line="301" Column="22" />
+      <File FileName="Assets/Scripts/GamePvE.cs" Line="451" Column="3" />
+      <File FileName="Assets/Scripts/GamePvP.cs" Line="41" Column="59" />
+      <File FileName="Assets/Scripts/MainMenu.cs" Line="211" Column="20" />
+      <File FileName="Assets/Scripts/NetworkPlayer.cs" Line="27" Column="29" />
+      <File FileName="Assets/Scripts/Ship.cs" Line="354" Column="51" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
