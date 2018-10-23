@@ -1,2 +1,2 @@
 # game_sea_battle
-tipovic
+Game based on C# & Unity
